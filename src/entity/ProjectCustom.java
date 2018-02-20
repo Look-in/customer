@@ -23,29 +23,32 @@ public class ProjectCustom {
         prop.put("useUnicode", "true");
         Connection cn = null;
         registerDriver(new com.mysql.jdbc.Driver());
-        try { // 1 блок
+
+        ArrayList<Item> items = new ArrayList<>();
+        try {
             cn = getConnection(url, prop);
             Statement st = null;
-            try { // 2 блок
+            try {
                 st = cn.createStatement();
                 ResultSet rs = null;
-                try { // 3 блок
-                    rs = st.executeQuery("SELECT * FROM ITEMS");
-                    ArrayList<Item> lst = new ArrayList<>();
+                try {
+
+                    rs = st.executeQuery("SELECT " +
+                            "item.ID,PRICE,NAME,DESCRIPTION,item_status.ID,STATUS" +
+                            " FROM ITEM INNER JOIN " +
+                            "item_status " +
+                            "ON item.ITEM_STATUS_ID=item_status.ID; ");
                     while (rs.next()) {
-                        int id = rs.getInt(1);
-                        float price = rs.getFloat(2);
-                        String name = rs.getString(3);
-                        byte status=rs.getByte(4);
-                        lst.add(new Item(id, price, name,status));
+                        Item tmpItem=new Item();
+                        tmpItem.setItemId(rs.getInt(1));
+                        tmpItem.setPrice(rs.getFloat(2));
+                        tmpItem.setName(rs.getString(3));
+                        tmpItem.setDescription(rs.getString(4));
+                        tmpItem.setItemStatusId(rs.getInt(5));
+                        tmpItem.setStatus(rs.getString(6));
+                        items.add(tmpItem);
                     }
-                    if (lst.size() > 0) {
-                        for (Item it:lst) System.out.println(it);
-                    } else {
-                        System.out.println("Not found");
-                    }
-                    // 3 блок
-                        rs = st.executeQuery("SELECT * FROM ITEMS");
+         /*               rs = st.executeQuery("SELECT * FROM ITEMS");
                         ArrayList<Item> lst = new ArrayList<>();
                         while (rs.next()) {
                             int id = rs.getInt(1);
@@ -54,45 +57,32 @@ public class ProjectCustom {
                             byte status=rs.getByte(4);
                             lst.add(new Item(id, price, name,status));
                         }
-                        if (lst.size() > 0) {
-                            for (Item it:lst) System.out.println(it);
+                        if (items.size() > 0) {
+                            for (Item it:items) System.out.println(it);
                         } else {
                             System.out.println("Not found");
-                        }
+                        }*/
 
-                    } finally { // для 3-го блока try
-                    /*
-                     * закрыть ResultSet, если он был открыт
-                     * или ошибка произошла во время
-                     * чтения из него данных
-                     */
-                    if (rs != null) { // был ли создан ResultSet
+                    }
+                    finally {
+                    if (rs != null) {
                         rs.close();
-                    } else {
+                    }
+                    else {
                         System.err.println(
                                 "ошибка во время чтения из БД");
                     }
                 }
             } finally {
-                /*
-                 * закрыть Statement, если он был открыт или ошибка
-                 * произошла во время создания Statement
-                 */
-                if (st != null) { // для 2-го блока try
+                if (st != null) {
                     st.close();
                 } else {
                     System.err.println("Statement не создан");
                 }
             }
-        } catch (SQLException e) { // для 1-го блока try
+        } catch (SQLException e) {
             System.err.println("DB connection error: " + e);
-            /*
-             * вывод сообщения о всех SQLException
-             */
         } finally {
-            /*
-             * закрыть Connection, если он был открыт
-             */
             if (cn != null) {
                 try {
                     cn.close();
@@ -100,6 +90,13 @@ public class ProjectCustom {
                     System.err.println("Сonnection close error: " + e);
                 }
             }
+
+            if (items.size() > 0) {
+                for (Item it:items) System.out.println(it);
+            } else {
+                System.out.println("Not found");
+            }
+
         }
 
 
