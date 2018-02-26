@@ -20,9 +20,6 @@ public class Item extends ItemStatus{
         super();
     }
 
-    public int getItemId() {
-        return itemId;
-    }
     public float getPrice() {
         return price;
     }
@@ -45,14 +42,6 @@ public class Item extends ItemStatus{
     }
     public String getDescription(){
         return description;
-    }
-    @Override
-    public void setItemStatusId(int itemStatusId){
-        super.setItemStatusId(itemStatusId);
-    }
-    @Override
-    public void setStatus(String status) {
-        super.setStatus(status);
     }
 
     @Override
