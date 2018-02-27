@@ -1,6 +1,6 @@
 package entity;
 
-public abstract class ItemStatus{
+public class ItemStatus{
     private int itemStatusId;
     private String status;
 
@@ -12,15 +12,23 @@ public abstract class ItemStatus{
     public ItemStatus() {
     }
 
-    protected void setItemStatusId(int itemStatusId){
+    public void setItemStatusId(int itemStatusId){
         this.itemStatusId=itemStatusId;
     }
-    protected void setStatus(String status) {
+
+    public String getStatus(){
+        return status;
+    }
+
+    public int getItemStatusId(){
+        return itemStatusId;
+    }
+    public void setStatus(String status) {
         this.status=status;
     }
 
    @Override
    public String toString() {
-        return status;
+        return "[Status id= "+itemStatusId+ " - "+status+"]";
    }
 }

@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Customer:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Customer_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Customer/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Customer" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="com.mysql.jdbc_5.1.51" />
+          <element id="library" level="project" name="com.mysql.jdbc_5.1.5" />
+          <element id="library" level="project" name="Java EE 6-Java EE 6" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
