@@ -10,6 +10,6 @@
 
 <header>
     <%--<h1><fmt:message key="header" /></h1>--%>
-    <h1>Items</h1>
+    <h1>${param.action} ${param.entity}</h1>
     <nav><a href="">Customer</a><a href="">Help</a><a href="">About</a></nav>
 </header>

@@ -7,38 +7,40 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:url var="url" value="css/global.css" />
-<link type="text/css" rel="stylesheet" href="${url}" />
-
+<link href="css/global.css" rel="stylesheet" type="text/css">
+<link href="css/item.css" rel="stylesheet" type="text/css">
 <html>
 <head>
-    <title>Items</title>
+    <title>${param.entity}</title>
 </head>
 <body>
 <%@include file="includes/header.jsp" %>
-<table class="features-table">
-    <tr>
-        <td>N</td>
-        <td class="grey">Name</td>
-        <td class="grey">Price</td>
-        <td class="green">Status</td>
-    </tr>
- <%--   <tfoot>
-    <tr>
-        <td></td>
-        <td class="grey" colspan="4">All items</td>
-    </tr>
-    </tfoot>--%>
-    <c:forEach var="elem" items="${item}" varStatus="status">
-        <tr>
-            <td><c:out value="${ status.count }" /></td>
-            <%--<td><c:out value="${ elem }" /></td>--%>
-            <td class="grey"><c:out value="${ elem.name }" /></td>
-            <td class="grey"><c:out value="${ elem.price }" /></td>
-            <td class="green"><c:out value="${ elem.status }" /></td>
-        </tr>
-    </c:forEach>
-
-</table>
+<div class="add-item">
+    <c:url var="addurl" value="/pushitemmodify">
+        <c:param name="action" value="add"/>
+    </c:url>
+    <a href="${addurl}">Add item</a>
+    <div>
+<c:forEach var="elem" items="${item}" varStatus="status">
+<div class="img-responsive">
+  <%-- <img class="item-image" src="${elem.base64imageFile}">--%>
+    <img class="item-image" src="css/images/no-img.png">
+    <span class="range-txt position-rage-bottom">
+        <c:out value="${ elem.itemStatus }" /><br>
+        <c:out value="${ elem.name }" /><br>
+        <strong><c:out value="${ elem.price }" />$</strong>
+  </span>
+      <c:url var="editurl" value="/pushitemmodify">
+          <c:param name="action" value="edit"/>
+          <c:param name="id" value="${elem.itemId}"/>
+      </c:url>
+       <a class="item edit" href="${editurl}">Edit</a>
+      <c:url var="deleteurl" value="/pushitemmodify">
+          <c:param name="action" value="delete"/>
+          <c:param name="id" value="${elem.itemId}"/>
+      </c:url>
+    <a class="item delete" href="${deleteurl}" title="">Delete</a>
+</div>
+</c:forEach>
 </body>
 </html>

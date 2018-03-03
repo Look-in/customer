@@ -1,6 +1,7 @@
 package entity;
 
-import java.util.ArrayList;
+import entity.event.Item;
+
 import java.util.List;
 import java.util.Date;
 

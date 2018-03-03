@@ -7,15 +7,20 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:url var="url" value="css/global.css" />
-<link type="text/css" rel="stylesheet" href="${url}" />
+<link href="css/global.css" rel="stylesheet" type="text/css">
+<link href="css/item.css" rel="stylesheet" type="text/css">
 <html>
+<%@include file="jsp/includes/header.jsp" %>
   <head>
     <title>$Title$</title>
   </head>
   <body>
-   <form name="Simple" action="itemservlet" method="POST">
-    <input type="submit" name="button" value="itemservlet"/>
-  </form>
-  </body>
+  <div>
+  <c:url var="selectitem" value="selectitemservlet">
+    <c:param name="action" value="list"/>
+    <c:param name="entity" value="Items"/>
+  </c:url>
+  <a href="${selectitem}" title="">ItemList</a>
+  </div>
+   </body>
 </html>

@@ -1,25 +1,21 @@
 package dao;
 
 import entity.Item;
-import jdbc.JdbcConnect;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import static jdbc.JdbcConnect.connect;
 
-public class ItemDao extends RuntimeException{
+public class SelectItemDao {
 
     public ArrayList<Item> readItem() throws SQLException {
         ArrayList<Item> items = new ArrayList<>();
-        JdbcConnect connection=new JdbcConnect();
-        try (         Connection cn=connection.connect()) {
-                //
-                try (Statement st = cn.createStatement();) {
-                    //Statement st = null;
-
-
-             //       st =
+         //Try с ресурсами закрывает коннект после заверш обработки запроса
+        //На каждый запрос свой коннект, что замедляет работу
+        try (Connection cn= connect()) {
+                try (Statement st = cn.createStatement()) {
                     ResultSet rs = null;
                     try {
                          rs = st.executeQuery("SELECT " +
@@ -38,17 +34,17 @@ public class ItemDao extends RuntimeException{
                             items.add(tmpItem);
                         }
                      } catch (Exception exc) {
-                        System.err.println(
-                                "ошибка во время чтения из БД " + exc.getMessage());
+                        throw new RuntimeException(
+                                "Error reading DB:" + exc.getMessage());
                     }
                     finally {if (rs != null) rs.close();
                     }
 
                     } catch (Exception exc) {
-                        System.err.println("Statement не создан " + exc.getMessage());
+                        throw new RuntimeException("Satement can't closed: "+exc);
                     }
-                } catch (SQLException e) {
-                    System.err.println("Сonnection close error: " + e);
+                } catch (Exception exc) {
+                    System.err.println("Сonnection close error: " + exc);
                 }
 
         return items;

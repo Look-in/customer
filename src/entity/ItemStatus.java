@@ -2,33 +2,34 @@ package entity;
 
 public class ItemStatus{
     private int itemStatusId;
-    private String status;
+    private String itemStatus;
 
-    public ItemStatus(int itemStatusId, String status) {
+    public ItemStatus(int itemStatusId, String itemStatus) {
         this.itemStatusId=itemStatusId;
-        this.status=status;
+        this.itemStatus=itemStatus;
     }
 
     public ItemStatus() {
+    }
+
+    public String getItemStatus(){
+        return itemStatus;
+    }
+
+    public int getItemStatusId(){
+        return itemStatusId;
     }
 
     public void setItemStatusId(int itemStatusId){
         this.itemStatusId=itemStatusId;
     }
 
-    public String getStatus(){
-        return status;
-    }
-
-    public int getItemStatusId(){
-        return itemStatusId;
-    }
-    public void setStatus(String status) {
-        this.status=status;
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus=itemStatus;
     }
 
    @Override
    public String toString() {
-        return "[Status id= "+itemStatusId+ " - "+status+"]";
+        return "[Status id= "+itemStatusId+ " - "+itemStatus+"]";
    }
 }
