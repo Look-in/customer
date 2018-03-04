@@ -15,7 +15,6 @@
 <head>
     <title>${param.entity} ${param.action}</title>
 </head>
-<>
 <%@include file="includes/header.jsp" %>
 <%@include file="includes/defaultitemmodify.jsp" %>
 <label for="useason">Season: </label>

@@ -11,6 +11,8 @@
 <form name="Modify" action="/pushitemmodify" method="POST">
     <div>
         <div>
+            <input type="hidden" name="action" value="${ param.action }">
+            <input type="hidden" name="entity" value="${ param.entity }">
         <label for="uname">Item name: </label>
         <input type="text" id="uname" name="name"
                size="30" value="${ item.name }">
@@ -20,14 +22,15 @@
         <input type="text" id="uprice" name="price"
                size="8" value="${ item.price }">
         </div>
+        <input type="hidden" name="itemid" value="${ item.itemId }">
         <div>
             <textarea name="description" id="description">${ item.description }</textarea>
         </div>
         <div>
-            <label for="stat[]">Status: </label>
-            <select class name="itemstatus">
+            <label for="selectstatus">Status: </label>
+            <select name="selectstatus">
                    <c:forEach var="itatus" items="${statuses}">
-                       <option value="${itatus.itemStatusId}" ${itatus.itemStatusId == item.itemStatusId ? 'selected="selected"' : ''}>${itatus.itemStatus}</option>
+                     <option value="${itatus.itemStatusId}" ${itatus.itemStatusId == item.itemStatusId ? 'selected="selected"' : ''}>${itatus.itemStatus}</option>
                    </c:forEach>
              </select>
         </div>

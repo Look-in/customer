@@ -1,6 +1,7 @@
 package dao.request;
 
 
+import dao.SelectDefaultItemDao;
 import entity.Clothes;
 import entity.event.Item;
 
@@ -55,16 +56,17 @@ public class SelectClothesDao {
 
     }
 
-    public Item readItem(int id) {
+    public static Item readItem(int id) {
         //Try с ресурсами закрывает коннект после заверш обработки запроса
         //На каждый запрос свой коннект, что замедляет работу
         final String sql="SELECT " +
-                "item.ID,PRICE,NAME,DESCRIPTION,item_status.ID,STATUS" +
-                " FROM ITEM INNER JOIN " +
-                "item_status " +
-                "ON item.ITEM_STATUS_ID=item_status.ID " +
-                "WHERE item.ID=?;";
+                "SEASON" +
+                " FROM CLOTHES " +
+                "WHERE ID=?;";
         Clothes tmpItem = new Clothes();
+        tmpItem.setItemId(id);
+        //Заполнить базовые свойства
+        SelectDefaultItemDao.readItem(tmpItem);
 
         try (Connection connection= connect()) {
 
@@ -72,15 +74,10 @@ public class SelectClothesDao {
             ResultSet rs = null;
             try {
                 statement = connection.prepareStatement(sql);
-                statement.setInt(1, id);
+                statement.setInt(1, tmpItem.getItemId());
                 rs = statement.executeQuery();
                 while (rs.next()){
-                        tmpItem.setItemId(rs.getInt(1));
-                        tmpItem.setPrice(rs.getFloat(2));
-                        tmpItem.setName(rs.getString(3));
-                        tmpItem.setDescription(rs.getString(4));
-                        tmpItem.setItemStatusId(rs.getInt(5));
-                        tmpItem.setItemStatus(rs.getString(6));
+                        tmpItem.setSeason(rs.getString(1));
                         //Преобразуем Blob в строку формата base 64
                             /*Blob ph = rs.getBlob(7);
                             tmpItem.setImage(ph.getBytes(1, (int) ph.length()));*/
