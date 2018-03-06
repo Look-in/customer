@@ -35,25 +35,14 @@ public class SelectDefaultItemDao {
 
     public ArrayList<Item> readFilteredListItem(int typeItemId) {
         ArrayList<Item> items = new ArrayList<>();
-        try (PreparedStatement statement = selectPreparedStatement(typeItemId);
+        try (PreparedStatement statement = selectAllPreparedStatement(typeItemId);
              ResultSet rs = statement.executeQuery()) {
-            Clothes tmpClothes =null;
-            Bicycle tmpBike =null;
+            Item item;
             while (rs.next()) {
-                switch (typeItemId) {
-                    case 1:
-                        tmpClothes = new Clothes();
-                        setItemParameter(rs,tmpClothes);
-                        tmpClothes.setTypeId(typeItemId);
-                        items.add(tmpClothes);
-                        break;
-                    case 2:
-                        tmpBike = new Bicycle();
-                        setItemParameter(rs,tmpBike);
-                        tmpBike.setTypeId(typeItemId);
-                        items.add(tmpBike);
-                        break;
-                }
+                item = new Item();
+                setItemParameter(rs,item);
+                item.setTypeId(typeItemId);
+                items.add(item);
             }
         } catch (Exception exc) {
             throw new RuntimeException(exc);
@@ -85,23 +74,12 @@ public class SelectDefaultItemDao {
                 "ON item.ITEM_STATUS_ID=item_status.ID;";
         try (Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(SQL)) {
-            Clothes tmpClothes =null;
-            Bicycle tmpBike =null;
+            Item item;
                 while (rs.next()) {
-                    switch (rs.getInt(7)) {
-                        case 1:
-                            tmpClothes = new Clothes();
-                            tmpClothes.setTypeId(rs.getInt(7));
-                            setItemParameter(rs,tmpClothes);
-                            items.add(tmpClothes);
-                            break;
-                        case 2:
-                            tmpBike = new Bicycle();
-                            tmpBike.setTypeId(rs.getInt(7));
-                            setItemParameter(rs,tmpBike);
-                            items.add(tmpBike);
-                            break;
-                    }
+                    item = new Item();
+                    item.setTypeId(rs.getInt(7));
+                    setItemParameter(rs,item);
+                    items.add(item);
                 }
             } catch (SQLException exc) {
                 throw new RuntimeException(exc);

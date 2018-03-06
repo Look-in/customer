@@ -50,6 +50,7 @@
       <c:url var="editurl" value="/viewitemmodify">
           <c:param name="action" value="EDIT"/>
           <c:param name="id" value="${elem.itemId}"/>
+          <c:param name="entity" value="${ param.entity }"/>
           <c:param name="entityid" value="${ param.entityid }"/>
       </c:url>
       <a class="item edit" ${param.entity == "ALL" ? 'hidden="true"' : ''} href="${editurl}">Edit</a>

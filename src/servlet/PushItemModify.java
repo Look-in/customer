@@ -41,6 +41,7 @@ public class PushItemModify extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Item item=null;
         ChangeInstance dao=null;
+
         switch (Integer.valueOf(request.getParameter("entityid"))) {
             case 1:
                Clothes clothes= new Clothes();

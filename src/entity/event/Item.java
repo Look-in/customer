@@ -1,12 +1,12 @@
 package entity.event;
 
 
-import entity.SetPriceException;
+import entity.SetException;
 import sun.misc.BASE64Encoder;
 
 
 
-public abstract class Item {
+public class Item {
     private int itemId;
     private float price;
     private String name;
@@ -67,7 +67,7 @@ public abstract class Item {
     }
     // @Test
     public void setPrice(float price){
-        if (price<0) throw new SetPriceException("Error. Price<0");
+        if (price<=0 ) throw new SetException("Error. Price not specified");
         else this.price=price;
     }
 
