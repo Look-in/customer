@@ -13,6 +13,7 @@
         <div>
             <input type="hidden" name="action" value="${ param.action }">
             <input type="hidden" name="entity" value="${ param.entity }">
+            <input type="hidden" name="entityid" value="${ param.entityid }">
         <label for="uname">Item name: </label>
         <input type="text" id="uname" name="name"
                size="30" value="${ item.name }">

@@ -1,7 +1,7 @@
 package dao.request;
 
-import com.mysql.jdbc.JDBC4Connection;
 import dao.ChangeInstance;
+import entity.Bicycle;
 import entity.Clothes;
 import jdbc.JdbcConnect;
 
@@ -10,41 +10,46 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
-public class ClothesDao extends ItemDao implements ChangeInstance<Clothes>{
+public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
 
 
-    private PreparedStatement createPreparedStatement(Clothes entity) throws SQLException{
-        final String sql ="INSERT INTO CLOTHES "
-                + "(ID,SEASON) VALUES "
-                + "(?, ?)";
+    private PreparedStatement createPreparedStatement(Bicycle entity) throws SQLException{
+        final String sql ="INSERT INTO BICYCLE "
+                + "(ID, FORK, BRAKES, FRAME) VALUES "
+                + "(?, ?, ?, ?)";
         Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, entity.getItemId());
-        statement.setString(2, entity.getSeason());
+        statement.setString(2, entity.getFork());
+        statement.setString(3, entity.getBrakes());
+        statement.setString(4, entity.getFrame());
         return statement;
     }
 
-    private PreparedStatement updatePreparedStatement(Clothes entity) throws SQLException{
+    private PreparedStatement updatePreparedStatement(Bicycle entity) throws SQLException{
         final String sql ="UPDATE CLOTHES SET "
-                + "SEASON = ? "
+                + "FORK = ?, BRAKES=?, FRAME=? "
                 + "WHERE id = ?";
         Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, entity.getSeason());
-        statement.setInt(2, entity.getItemId());
+        statement.setString(1, entity.getFork());
+        statement.setString(2, entity.getBrakes());
+        statement.setString(3, entity.getFrame());
+        statement.setInt(4, entity.getItemId());
         return statement;
     }
 
 
-
     @Override
-    public void create(Clothes entity) {
+    public void create(Bicycle entity) {
+        /*Try с ресурсами закрывает коннект после заверш обработки запроса
+        На каждый запрос свой коннект, что замедляет работу, но на тестовом проекте это некритично*/
         Connection connection = JdbcConnect.getInstance().connect();
              //Заполняет базовую таблицу товара.
-         createItem(entity);
-         try (PreparedStatement statement = createPreparedStatement(entity)) {
-             //Заполняет таблицу свойств Clothes
-         statement.executeUpdate();
+            createItem(entity);
+            try (PreparedStatement statement = createPreparedStatement(entity)) {
+                //Заполняет таблицу свойств Clothes
+                statement.executeUpdate();
         }
           catch (SQLException e) {
             throw new RuntimeException(e);
@@ -52,7 +57,7 @@ public class ClothesDao extends ItemDao implements ChangeInstance<Clothes>{
     }
 
     @Override
-    public void update(Clothes entity) {
+    public void update(Bicycle entity) {
         Connection connection= JdbcConnect.getInstance().connect();
         try (PreparedStatement statement=updatePreparedStatement(entity)) {
                 updateItem(entity);
@@ -83,7 +88,5 @@ public class ClothesDao extends ItemDao implements ChangeInstance<Clothes>{
                 throw new RuntimeException(
                         "Error reading DB:" + exc.getMessage());
             }
-
-
     }
 }

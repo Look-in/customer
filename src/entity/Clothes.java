@@ -22,6 +22,13 @@ public class Clothes extends Item {
     public void setSeason(String season) {
         this.season = season;
     }
+
+    @Override
+    public String toString() {
+        return "Clothes{" +
+                "season='" + season + '\'' +super.toString()+
+                '}';
+    }
 }
 
 

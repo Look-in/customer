@@ -2,28 +2,32 @@ package dao.request;
 
 import dao.ChangeInstance;
 import entity.event.Item;
+import jdbc.JdbcConnect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ItemDao {
+public abstract class ItemDao{
 
-    private PreparedStatement createPreparedStatement(Connection connection, Item entity) throws SQLException {
+    private PreparedStatement createPreparedStatement(Item entity) throws SQLException {
         final String sql = "INSERT INTO ITEM "
-                + "(PRICE,NAME,DESCRIPTION,ITEM_STATUS_ID) VALUES "
-                + "(?, ?, ?, ?)";
+                + "(PRICE,NAME,DESCRIPTION,ITEM_STATUS_ID,ITEM_TYPE_ID) VALUES "
+                + "(?, ?, ?, ?, ?)";
+        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setFloat(1, entity.getPrice());
         statement.setString(2, entity.getName());
         statement.setString(3, entity.getDescription());
         statement.setInt(4, entity.getItemStatusId());
+        statement.setInt(5, entity.getTypeId());
         return statement;
     }
 
-    public void create(Connection connection, Item entity) {
-        try (PreparedStatement statement = createPreparedStatement(connection, entity)) {
+    public void createItem(Item entity) {
+        try (PreparedStatement statement = createPreparedStatement(entity)) {
+            Connection connection = JdbcConnect.getInstance().connect();
             statement.executeUpdate();
             try (ResultSet keys = statement.getGeneratedKeys()) {
                 keys.next();
@@ -49,7 +53,8 @@ public class ItemDao {
         return statement;
     }
 
-    public void update(Connection connection, Item entity) {
+    public void updateItem(Item entity) {
+        Connection connection = JdbcConnect.getInstance().connect();
         try (PreparedStatement statement = updatePreparedStatement(connection, entity)) {
             statement.executeUpdate();
         }
@@ -60,7 +65,7 @@ public class ItemDao {
 
     }
 
-    public void delete(Integer id) {
+    public void deleteItem(Integer id) {
 
     }
 }

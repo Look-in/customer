@@ -1,8 +1,13 @@
 package servlet;
 
+import dao.request.BicycleDao;
+import dao.request.ClothesDao;
 import dao.request.SelectClothesDao;
 import dao.request.SelectItemStatusDao;
+import entity.Bicycle;
 import entity.Clothes;
+import entity.event.Item;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,19 +29,40 @@ public class ViewItemModify extends HttpServlet {
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        switch (request.getParameter("action")) {
+        String jsp="";
+            switch (Integer.valueOf(request.getParameter("entityid"))) {
+                case 1:
+                    Clothes item= new Clothes();
+                    jsp="jsp/clothesmodify.jsp";
+                    request.setAttribute("item", SelectClothesDao
+                            .getInstance()
+                            .readItem(Integer.valueOf(request.getParameter("id"))));
+                    request.setAttribute("item", item);
+                    break;
+
+                case 2:
+                    Bicycle bike= new Bicycle();
+                    jsp="jsp/bicyclemodify.jsp";
+                    request.setAttribute("item", bike);
+                    break;
+            }
+
+   /*     switch (request.getParameter("action")) {
             case "ADD":
-                Clothes clothes=new Clothes();
-                request.setAttribute("item", clothes);
+                request.setAttribute("item", item);
                 break;
+
             case "EDIT":
-                request.setAttribute("item", SelectClothesDao.readItem(Integer.valueOf(request.getParameter("id"))));
+               // System.err.println(request.getParameter("id"));
+                request.setAttribute("item", SelectClothesDao
+                        .getInstance()
+                        .readItem(Integer.valueOf(request.getParameter("id"))));
                 break;
             case "DELETE":
                 break;
-        }
+        }*/
         request.setAttribute("statuses", SelectItemStatusDao.readItemStatus());
-        request.getRequestDispatcher("jsp/clothesmodify.jsp").forward(request, response);
+        request.getRequestDispatcher(jsp).forward(request, response);
     }
 
 }

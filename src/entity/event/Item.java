@@ -14,6 +14,8 @@ public abstract class Item {
     private byte[] image;
     private int itemStatusId;
     private String itemStatus;
+    private int typeId;
+    private String type;
 
     public Item(int itemId, float price, String name, String description, int statusId, String itemStatus) {
         this.itemStatus=itemStatus;
@@ -97,7 +99,23 @@ public abstract class Item {
         return imageString.toString();
     }
 
-     @Override
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
     public String toString() {
         return "Item [Id =" + itemId + ", price=" +
                 String.format("%.2f", price) + ", name=" + name + " description= "+

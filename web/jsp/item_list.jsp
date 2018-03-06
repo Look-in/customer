@@ -24,14 +24,17 @@
 <c:forEach var="typeitem" items="${typeitem}">
     <c:url var="selectitem" value="selectitemservlet">
         <c:param name="action" value="list"/>
-        <c:param name="entity" value="${typeitem}"/>
+        <c:param name="entity" value="${typeitem.type}"/>
+        <c:param name="entityid" value="${typeitem.id}"/>
     </c:url>
-<a href="${selectitem}" title="">${typeitem}</a>
+<a href="${selectitem}" title="">${typeitem.type}</a>
 </c:forEach>
 </div>
 <div class="add-item">
     <c:url var="addurl" value="/viewitemmodify">
         <c:param name="action" value="ADD"/>
+        <c:param name="entity" value="${ param.entity }"/>
+        <c:param name="entityid" value="${ param.entityid }"/>
     </c:url>
     <a ${param.entity == "ALL" ? 'hidden="true"' : ''} href="${addurl}">Add item</a>
     </div>
@@ -47,6 +50,7 @@
       <c:url var="editurl" value="/viewitemmodify">
           <c:param name="action" value="EDIT"/>
           <c:param name="id" value="${elem.itemId}"/>
+          <c:param name="entityid" value="${ param.entityid }"/>
       </c:url>
       <a class="item edit" ${param.entity == "ALL" ? 'hidden="true"' : ''} href="${editurl}">Edit</a>
       <c:url var="deleteurl" value="/viewitemmodify">

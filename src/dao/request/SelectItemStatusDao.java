@@ -1,25 +1,27 @@
 package dao.request;
 
-import dao.ChangeInstance;
-import entity.Clothes;
 import entity.ItemStatus;
-import entity.event.Item;
-
+import jdbc.JdbcConnect;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import static jdbc.JdbcConnect.connect;
-
 public class SelectItemStatusDao {
+    private static SelectItemStatusDao instance;
+
+    public static SelectItemStatusDao getInstance(){
+        if(instance == null){
+            instance = new SelectItemStatusDao();
+        }
+        return instance;
+    }
+
 
     public static ArrayList<ItemStatus> readItemStatus() {
         ArrayList<ItemStatus> status = new ArrayList<>();
-        //Try с ресурсами закрывает коннект после заверш обработки запроса
-        //На каждый запрос свой коннект, что замедляет работу
-        try (Connection cn= connect()) {
-            try (Statement st = cn.createStatement()) {
+        Connection connection= JdbcConnect.getInstance().connect();
+             try (Statement st = connection.createStatement()) {
                 ResultSet rs = null;
                 try {
                     rs = st.executeQuery("SELECT " +
@@ -41,9 +43,6 @@ public class SelectItemStatusDao {
             } catch (Exception exc) {
                 throw new RuntimeException("Satement can't closed: "+exc);
             }
-        } catch (Exception exc) {
-            System.err.println("Сonnection close error: " + exc);
-        }
 
         return status;
 

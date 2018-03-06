@@ -1,8 +1,9 @@
 package servlet;
 
+import dao.SelectDefaultItemDao;
 import dao.request.SelectClothesDao;
-import entity.event.TypeItem;
-
+import dao.request.SelectTypeDao;
+import entity.event.ItemType;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,16 +21,16 @@ import java.util.ArrayList;
 public class SelectItemServlet extends javax.servlet.http.HttpServlet {
 
     private void doRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("typeitem", TypeItem.values());
-        switch (request.getParameter("entity")) {
-            case "ALL":
-                request.setAttribute("item", SelectClothesDao.readListItem());
-                break;
-            case "CLOTHES":
-                request.setAttribute("item", SelectClothesDao.readListItem());
-                break;
-            case "BICYCLE":
-                break;
+        ArrayList<ItemType> type=SelectTypeDao.readType();
+        request.setAttribute("typeitem", type);
+        if (request.getParameter("entity").equals("ALL")) {
+                request.setAttribute("item", SelectDefaultItemDao
+                        .getInstance().readAllListItem());
+        }
+        else {
+            request.setAttribute("item", SelectDefaultItemDao
+                    .getInstance()
+                    .readFilteredListItem(Integer.valueOf(request.getParameter("entityid"))));
         }
         request.getRequestDispatcher("jsp/item_list.jsp").forward(request, response);
     }

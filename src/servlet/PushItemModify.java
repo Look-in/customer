@@ -1,8 +1,10 @@
 package servlet;
 
 import dao.ChangeInstance;
+import dao.request.BicycleDao;
 import dao.request.ClothesDao;
 import dao.request.SelectClothesDao;
+import entity.Bicycle;
 import entity.Clothes;
 import entity.event.Item;
 
@@ -20,42 +22,54 @@ import java.sql.SQLException;
         urlPatterns = "/pushitemmodify")
 
 public class PushItemModify extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       Clothes item=new Clothes();
-  /*     switch (request.getParameter("entity")) {
-        case "Clothes":               // Clothes clothes=new Clothes();*/
-       if (request.getParameter("itemid")!=null) {
-           item.setItemId(Integer.valueOf(request.getParameter("itemid")));
-       }
+
+
+    private void readAttribute(HttpServletRequest request,Item item){
+        if (request.getParameter("itemid")!=null) {
+            item.setItemId(Integer.valueOf(request.getParameter("itemid")));
+        }
         item.setName(request.getParameter("name"));
         item.setDescription(request.getParameter("description"));
         if (request.getParameter("price")!=null) {
-            float price=Float.valueOf(request.getParameter("price"));
-            if (price >= 0) item.setPrice(price); else throw new RuntimeException("Price <0");
-        }
-        else {
-            throw new RuntimeException("Price not declared");
+            item.setPrice(Float.valueOf(request.getParameter("price")));
         }
         item.setItemStatusId(Integer.valueOf(request.getParameter("selectstatus")));
-        item.setSeason(request.getParameter("season"));
-              //  item=clothes;
-                /*break;
-            case "NewItem":
-                break;
-        }*/
-        System.err.println("id="+item.getItemId());
-        ChangeInstance dao;
+        item.setType(request.getParameter("entity"));
+        item.setTypeId(Integer.valueOf(request.getParameter("entityid")));
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Item item=null;
+        ChangeInstance dao=null;
+        switch (Integer.valueOf(request.getParameter("entityid"))) {
+            case 1:
+               Clothes clothes= new Clothes();
+               readAttribute(request,clothes);
+               clothes.setSeason(request.getParameter("season"));
+               item=clothes;
+               dao=new ClothesDao();
+            break;
+            case 2:
+                Bicycle bike= new Bicycle();
+                readAttribute(request,bike);
+                bike.setBrakes(request.getParameter("brakes"));
+                bike.setFork(request.getParameter("fork"));
+                bike.setFrame(request.getParameter("frame"));
+                item=bike;
+                dao=new BicycleDao();
+
+            break;
+        }
         switch (request.getParameter("action")) {
             case "ADD":
-               dao=new ClothesDao();
-               //раскоментировать после отладки
-           //    dao.create(item);
+              //раскоментировать после отладки
+               dao.create(item);
                 break;
             case "EDIT":
-                dao=new ClothesDao();
                 dao.update(item);
                 break;
             case "DELETE":
+                dao.delete(item.getItemId());
                 break;
         }
        // request.setAttribute("item", SelectClothesDao.readListItem());
