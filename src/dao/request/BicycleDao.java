@@ -3,15 +3,25 @@ package dao.request;
 import dao.ChangeInstance;
 import entity.Bicycle;
 import entity.Clothes;
+import entity.event.ItemAttributes;
 import jdbc.JdbcConnect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 
 
 public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
 
+    private static BicycleDao instance;
+
+    public static BicycleDao getInstance(){
+        if(instance == null){
+            instance = new BicycleDao();
+        }
+        return instance;
+    }
 
     private PreparedStatement createPreparedStatement(Bicycle entity) throws SQLException{
         final String sql ="INSERT INTO BICYCLE "
@@ -27,7 +37,7 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
     }
 
     private PreparedStatement updatePreparedStatement(Bicycle entity) throws SQLException{
-        final String sql ="UPDATE CLOTHES SET "
+        final String sql ="UPDATE BICYCLE SET "
                 + "FORK = ?, BRAKES=?, FRAME=? "
                 + "WHERE id = ?";
         Connection connection = JdbcConnect.getInstance().connect();
@@ -89,4 +99,5 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
                         "Error reading DB:" + exc.getMessage());
             }
     }
+
 }

@@ -26,7 +26,7 @@ public class SelectItemStatusDao {
                 try {
                     rs = st.executeQuery("SELECT " +
                             "ID,STATUS" +
-                            " FROM ITEM_STATUS");
+                            " FROM ITEM_STATUS order by id;");
                     while (rs.next()) {
                         ItemStatus tmpStatus = new ItemStatus();
                         tmpStatus.setItemStatusId(rs.getInt(1));

@@ -11,6 +11,8 @@ import java.sql.SQLException;
 
 public abstract class ItemDao{
 
+
+
     private PreparedStatement createPreparedStatement(Item entity) throws SQLException {
         final String sql = "INSERT INTO ITEM "
                 + "(PRICE,NAME,DESCRIPTION,ITEM_STATUS_ID,ITEM_TYPE_ID) VALUES "

@@ -3,15 +3,26 @@ package dao.request;
 import com.mysql.jdbc.JDBC4Connection;
 import dao.ChangeInstance;
 import entity.Clothes;
+import entity.event.ItemAttributes;
 import jdbc.JdbcConnect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 
 
 public class ClothesDao extends ItemDao implements ChangeInstance<Clothes>{
 
+
+    private static ClothesDao instance;
+
+    public static ClothesDao getInstance(){
+        if(instance == null){
+            instance = new ClothesDao();
+        }
+        return instance;
+    }
 
     private PreparedStatement createPreparedStatement(Clothes entity) throws SQLException{
         final String sql ="INSERT INTO CLOTHES "
@@ -86,4 +97,5 @@ public class ClothesDao extends ItemDao implements ChangeInstance<Clothes>{
 
 
     }
+
 }

@@ -73,16 +73,16 @@ public class SelectDefaultItemDao {
                 "item_status " +
                 "ON item.ITEM_STATUS_ID=item_status.ID;";
         try (Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(SQL)) {
+             ResultSet rs = st.executeQuery(SQL)) {
             Item item;
-                while (rs.next()) {
-                    item = new Item();
-                    item.setTypeId(rs.getInt(7));
-                    setItemParameter(rs,item);
-                    items.add(item);
-                }
-            } catch (SQLException exc) {
-                throw new RuntimeException(exc);
+            while (rs.next()) {
+                item = new Item();
+                item.setTypeId(rs.getInt(7));
+                setItemParameter(rs,item);
+                items.add(item);
+            }
+        } catch (SQLException exc) {
+            throw new RuntimeException(exc);
         }
 
         return items;
@@ -105,7 +105,7 @@ public class SelectDefaultItemDao {
 
 
     public static void readItem(Item tmpItem) {
-         try (PreparedStatement statement = selectPreparedStatement(tmpItem.getItemId());
+        try (PreparedStatement statement = selectPreparedStatement(tmpItem.getItemId());
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 tmpItem.setPrice(rs.getFloat(1));
@@ -126,4 +126,3 @@ public class SelectDefaultItemDao {
     }
 
 }
-

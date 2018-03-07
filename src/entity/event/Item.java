@@ -1,24 +1,33 @@
 package entity.event;
 
 
+import dao.request.SelectItemStatusDao;
 import entity.SetException;
 import sun.misc.BASE64Encoder;
 
+import java.util.Map;
 
 
-public class Item {
+public class Item implements ItemAttributes{
     private int itemId;
     private float price;
     private String name;
     private String description;
     private byte[] image;
     private int itemStatusId;
-    private String itemStatus;
     private int typeId;
     private String type;
+    private String itemStatus;
 
-    public Item(int itemId, float price, String name, String description, int statusId, String itemStatus) {
-        this.itemStatus=itemStatus;
+    public String getItemStatus() {
+        return itemStatus;
+    }
+
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus = itemStatus;
+    }
+
+    public Item(int itemId, float price, String name, String description, int statusId) {
         this.itemStatusId=statusId;
         this.itemId=itemId;
         this.price=price;
@@ -36,14 +45,6 @@ public class Item {
 
     public void setItemStatusId(int itemStatusId) {
         this.itemStatusId = itemStatusId;
-    }
-
-    public String getItemStatus() {
-        return itemStatus;
-    }
-
-    public void setItemStatus(String itemStatus) {
-        this.itemStatus = itemStatus;
     }
 
     public float getPrice() {
@@ -119,8 +120,45 @@ public class Item {
     public String toString() {
         return "Item [Id =" + itemId + ", price=" +
                 String.format("%.2f", price) + ", name=" + name + " description= "+
-                description + "] " + super.toString();
+                description +" statusId="+itemStatusId + " type="+type+" typeId="+typeId;
     }
 
-}
+    @Override
+    public void setItemAttributes(Map<String, String[]> attributes) {
+        String[] str;
+        str = attributes.get("itemid");
+        if (str.length > 0) {
+            if (str[0]!=null&&!str[0].isEmpty())
+            itemId = Integer.valueOf(str[0]);
+        }
+        str = attributes.get("price");
+        if (str.length > 0) {
+            if (str[0]!=null&&!str[0].isEmpty())
+                price = Float.valueOf(str[0]);
+        }
+        str = attributes.get("name");
+        if (str.length > 0) name = str[0];
+        str = attributes.get("description");
+        if (str.length > 0) description = str[0];
+        str = attributes.get("selectstatus");
+        if (str.length > 0) {
+            if (str[0]!=null&&!str[0].isEmpty()) {
+                itemStatusId = Integer.valueOf(str[0]);
+                SelectItemStatusDao.readItemStatus().get(itemStatusId-1);
+            }
+        }
+        str = attributes.get("entity");
+        if (str.length > 0) type = str[0];
+        str = attributes.get("entityid");
+        if (str.length > 0) {
+            if (str[0]!=null&&!str[0].isEmpty()) {
+                typeId = Integer.valueOf(str[0]);
+            }
+        }
+
+        }
+    }
+
+
+
 
