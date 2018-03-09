@@ -1,15 +1,12 @@
 package dao.request;
 
-import com.mysql.jdbc.JDBC4Connection;
 import dao.ChangeInstance;
 import entity.Clothes;
-import entity.event.ItemAttributes;
 import jdbc.JdbcConnect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Map;
 
 
 public class ClothesDao extends ItemDao implements ChangeInstance<Clothes>{

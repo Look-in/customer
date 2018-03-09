@@ -5,6 +5,7 @@ import dao.request.BicycleDao;
 import dao.request.ClothesDao;
 import entity.Bicycle;
 import entity.Clothes;
+import entity.ItemAttribute;
 import entity.event.Item;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,17 +24,16 @@ import java.util.Map;
 public class PushItemModify extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Map<String,String[]> parameterMap=request.getParameterMap();
+        Map<String, String[]> parameterMap = request.getParameterMap();
         Map<Integer, Item> daoItem = new HashMap<>();
-        daoItem.put(1,new Clothes());
-        daoItem.put(2,new Bicycle());
+        daoItem.put(1, new Clothes());
+        daoItem.put(2, new Bicycle());
         Map<Integer, ChangeInstance> daoInstance = new HashMap<>();
-        daoInstance.put(1,ClothesDao.getInstance());
-        daoInstance.put(2,BicycleDao.getInstance());
-        Item item=daoItem.get(Integer.valueOf(request.getParameter("entityid")));
-        item.setItemAttributes(parameterMap);
-        ChangeInstance dao=daoInstance.get(Integer.valueOf(request.getParameter("entityid")));
-        System.err.println(item.toString());
+        daoInstance.put(1, ClothesDao.getInstance());
+        daoInstance.put(2, BicycleDao.getInstance());
+        Item item = daoItem.get(Integer.valueOf(request.getParameter("typeId")));
+        ItemAttribute.getInstance().setItemAttributes(item, parameterMap);
+        ChangeInstance dao = daoInstance.get(Integer.valueOf(request.getParameter("typeId")));
         switch (request.getParameter("action")) {
             case "ADD":
                 //раскоментировать после отладки
@@ -47,7 +47,7 @@ public class PushItemModify extends HttpServlet {
                 break;
         }
         request.getRequestDispatcher("selectitemservlet").forward(request, response);
-     }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

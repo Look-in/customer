@@ -28,12 +28,12 @@ public class ViewItemModify extends HttpServlet {
         Map<Integer, SelectDao> dao = new HashMap<>();
         dao.put(1, SelectClothesDao.getInstance());
         dao.put(2, SelectBicycleDao.getInstance());
-        if (request.getParameter("id") != null) {
-            request.setAttribute("item", dao.get(Integer.valueOf(request.getParameter("entityid")))
-                    .readItem(Integer.valueOf(request.getParameter("id"))));
+        if (request.getParameter("itemId") != null) {
+            request.setAttribute("item", dao.get(Integer.valueOf(request.getParameter("typeId")))
+                    .readItem(Integer.valueOf(request.getParameter("itemId"))));
         }
         request.setAttribute("statuses", SelectItemStatusDao.readItemStatus());
-        request.getRequestDispatcher(String.format("jsp/%smodify.jsp",request.getParameter("entity").toLowerCase())).forward(request, response);
+        request.getRequestDispatcher(String.format("jsp/%smodify.jsp",request.getParameter("type").toLowerCase())).forward(request, response);
     }
 
 }

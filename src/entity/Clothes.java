@@ -2,8 +2,6 @@ package entity;
 
 import entity.event.Item;
 
-import java.util.Map;
-
 public class Clothes extends Item {
     private String season;
 
@@ -27,17 +25,10 @@ public class Clothes extends Item {
     @Override
     public String toString() {
         return "Clothes{" +
-                "season='" + season + '\'' +super.toString()+
+                "season='" + season + '\'' + super.toString() +
                 '}';
     }
 
-    @Override
-    public void setItemAttributes(Map<String, String[]> attributes) {
-        super.setItemAttributes(attributes);
-        String[] str;
-        str = attributes.get("season");
-        if (str.length > 0) season = str[0];
-    }
 }
 
 

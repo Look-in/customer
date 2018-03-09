@@ -11,21 +11,21 @@
 <link href="css/item.css" rel="stylesheet" type="text/css">
 <html>
 <head>
-    <title>${param.entity}</title>
+    <title>${param.type}</title>
 </head>
 <body>
 <%@include file="includes/header.jsp" %>
 <div>
     <c:url var="selectitem" value="selectitemservlet">
         <c:param name="action" value="list"/>
-        <c:param name="entity" value="ALL"/>
+        <c:param name="type" value="ALL"/>
     </c:url>
     <a href="${selectitem}" title="">ALL</a>
 <c:forEach var="typeitem" items="${typeitem}">
     <c:url var="selectitem" value="selectitemservlet">
         <c:param name="action" value="list"/>
-        <c:param name="entity" value="${typeitem.type}"/>
-        <c:param name="entityid" value="${typeitem.id}"/>
+        <c:param name="type" value="${typeitem.type}"/>
+        <c:param name="typeId" value="${typeitem.id}"/>
     </c:url>
 <a href="${selectitem}" title="">${typeitem.type}</a>
 </c:forEach>
@@ -33,10 +33,10 @@
 <div class="add-item">
     <c:url var="addurl" value="/viewitemmodify">
         <c:param name="action" value="ADD"/>
-        <c:param name="entity" value="${ param.entity }"/>
-        <c:param name="entityid" value="${ param.entityid }"/>
+        <c:param name="type" value="${ param.type }"/>
+        <c:param name="typeId" value="${ param.typeId }"/>
     </c:url>
-    <a ${param.entity == "ALL" ? 'hidden="true"' : ''} href="${addurl}">Add item</a>
+    <a ${param.type == "ALL" ? 'hidden="true"' : ''} href="${addurl}">Add item</a>
     </div>
 <c:forEach var="elem" items="${item}" varStatus="status">
 <div class="img-responsive">
@@ -49,14 +49,14 @@
   </span>
       <c:url var="editurl" value="/viewitemmodify">
           <c:param name="action" value="EDIT"/>
-          <c:param name="id" value="${elem.itemId}"/>
-          <c:param name="entity" value="${ param.entity }"/>
-          <c:param name="entityid" value="${ param.entityid }"/>
+          <c:param name="itemId" value="${elem.itemId}"/>
+          <c:param name="type" value="${ param.type }"/>
+          <c:param name="typeId" value="${ param.typeId }"/>
       </c:url>
-      <a class="item edit" ${param.entity == "ALL" ? 'hidden="true"' : ''} href="${editurl}">Edit</a>
+      <a class="item edit" ${param.type == "ALL" ? 'hidden="true"' : ''} href="${editurl}">Edit</a>
       <c:url var="deleteurl" value="/viewitemmodify">
           <c:param name="action" value="DELETE"/>
-          <c:param name="id" value="${elem.itemId}"/>
+          <c:param name="itemId" value="${elem.itemId}"/>
       </c:url>
     <a class="item delete" href="${deleteurl}" title="">Delete</a>
 </div>

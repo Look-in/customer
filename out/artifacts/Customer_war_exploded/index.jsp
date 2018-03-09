@@ -18,7 +18,7 @@
   <div>
   <c:url var="selectitem" value="selectitemservlet">
     <c:param name="action" value="list"/>
-    <c:param name="entity" value="ALL"/>
+    <c:param name="type" value="ALL"/>
   </c:url>
   <a href="${selectitem}" title="">ItemList</a>
   </div>

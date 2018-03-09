@@ -3,8 +3,6 @@ package entity;
 
 import entity.event.Item;
 
-import java.util.Map;
-
 public class Bicycle extends Item {
     private String fork;
     private String brakes;
@@ -50,19 +48,7 @@ public class Bicycle extends Item {
                 "fork='" + fork + '\'' +
                 ", brakes='" + brakes + '\'' +
                 ", frame='" + frame + '\'' +
-                '}'+super.toString();
-    }
-
-    @Override
-    public void setItemAttributes(Map<String, String[]> attributes) {
-        String[] str;
-        str = attributes.get("fork");
-        if (str.length > 0) fork = str[0];
-        str = attributes.get("brakes");
-        if (str.length > 0) brakes = str[0];
-        str = attributes.get("frame");
-        if (str.length > 0) frame = str[0];
-        super.setItemAttributes(attributes);
+                '}' + super.toString();
     }
 }
 

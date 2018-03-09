@@ -1,6 +1,5 @@
 package dao.request;
 
-import dao.ChangeInstance;
 import entity.event.Item;
 import jdbc.JdbcConnect;
 
@@ -9,8 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class ItemDao{
-
+public abstract class ItemDao {
 
 
     private PreparedStatement createPreparedStatement(Item entity) throws SQLException {
@@ -35,15 +33,14 @@ public abstract class ItemDao{
                 keys.next();
                 entity.setItemId(keys.getInt(1));
             }
-        }
-             catch (SQLException exc) {
-                throw new RuntimeException(
-                        "JDBC error:" + exc.getMessage());
+        } catch (SQLException exc) {
+            throw new RuntimeException(
+                    "JDBC error:" + exc.getMessage());
         }
     }
 
     private PreparedStatement updatePreparedStatement(Connection connection, Item entity) throws SQLException {
-        final String sql ="UPDATE ITEM SET "
+        final String sql = "UPDATE ITEM SET "
                 + "PRICE = ? , NAME = ? , DESCRIPTION= ? , ITEM_STATUS_ID = ? "
                 + "WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -59,11 +56,10 @@ public abstract class ItemDao{
         Connection connection = JdbcConnect.getInstance().connect();
         try (PreparedStatement statement = updatePreparedStatement(connection, entity)) {
             statement.executeUpdate();
+        } catch (SQLException exc) {
+            throw new RuntimeException(
+                    "JDBC error:" + exc.getMessage());
         }
-             catch (SQLException exc) {
-                throw new RuntimeException(
-                        "JDBC error:" + exc.getMessage());
-            }
 
     }
 

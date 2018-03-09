@@ -2,14 +2,11 @@ package dao.request;
 
 import dao.ChangeInstance;
 import entity.Bicycle;
-import entity.Clothes;
-import entity.event.ItemAttributes;
 import jdbc.JdbcConnect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Map;
 
 
 public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{

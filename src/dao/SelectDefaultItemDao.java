@@ -1,8 +1,5 @@
 package dao;
 
-import dao.request.SelectClothesDao;
-import entity.Bicycle;
-import entity.Clothes;
 import entity.event.Item;
 import jdbc.JdbcConnect;
 
@@ -11,10 +8,11 @@ import java.util.ArrayList;
 
 
 public class SelectDefaultItemDao {
+
     private static SelectDefaultItemDao instance;
 
-    public static SelectDefaultItemDao getInstance(){
-        if(instance == null){
+    public static SelectDefaultItemDao getInstance() {
+        if (instance == null) {
             instance = new SelectDefaultItemDao();
         }
         return instance;
@@ -27,7 +25,7 @@ public class SelectDefaultItemDao {
                 "item_status " +
                 "ON item.ITEM_STATUS_ID=item_status.ID " +
                 "WHERE ITEM_TYPE_ID=?;";
-        Connection connection= JdbcConnect.getInstance().connect();
+        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
         return statement;
@@ -40,7 +38,7 @@ public class SelectDefaultItemDao {
             Item item;
             while (rs.next()) {
                 item = new Item();
-                setItemParameter(rs,item);
+                setItemParameter(rs, item);
                 item.setTypeId(typeItemId);
                 items.add(item);
             }
@@ -51,12 +49,12 @@ public class SelectDefaultItemDao {
         return items;
     }
 
-    private void setItemParameter(ResultSet rs,Item item) throws SQLException {
+    private void setItemParameter(ResultSet rs, Item item) throws SQLException {
         item.setItemId(rs.getInt(1));
         item.setPrice(rs.getFloat(2));
         item.setName(rs.getString(3));
         item.setDescription(rs.getString(4));
-        item.setItemStatusId(rs.getInt(5));
+        item.setStatusId(rs.getInt(5));
         item.setItemStatus(rs.getString(6));
         //Преобразуем Blob в строку формата base 64
                             /*Blob ph = rs.getBlob(7);
@@ -66,7 +64,7 @@ public class SelectDefaultItemDao {
     public ArrayList<Item> readAllListItem() {
 
         ArrayList<Item> items = new ArrayList<>();
-        Connection connection= JdbcConnect.getInstance().connect();
+        Connection connection = JdbcConnect.getInstance().connect();
         final String SQL = "SELECT " +
                 "item.ID,PRICE,NAME,DESCRIPTION,item_status.ID,STATUS,ITEM_TYPE_ID" +
                 " FROM ITEM INNER JOIN " +
@@ -78,7 +76,7 @@ public class SelectDefaultItemDao {
             while (rs.next()) {
                 item = new Item();
                 item.setTypeId(rs.getInt(7));
-                setItemParameter(rs,item);
+                setItemParameter(rs, item);
                 items.add(item);
             }
         } catch (SQLException exc) {
@@ -90,14 +88,14 @@ public class SelectDefaultItemDao {
 
 
     private static PreparedStatement selectPreparedStatement(int id) throws SQLException {
-        final String SQL="SELECT " +
+        final String SQL = "SELECT " +
                 "PRICE,NAME,DESCRIPTION,item_status.ID,STATUS, ITEM.ITEM_TYPE_ID, ITEM_TYPE" +
                 " FROM (ITEM INNER JOIN " +
                 "item_status " +
                 "ON item.ITEM_STATUS_ID=item_status.ID) " +
-                "INNER JOIN ITEM_TYPE ON ITEM_TYPE.ID=ITEM.ITEM_TYPE_ID "+
+                "INNER JOIN ITEM_TYPE ON ITEM_TYPE.ID=ITEM.ITEM_TYPE_ID " +
                 "WHERE ITEM.ID=?;";
-        Connection connection= JdbcConnect.getInstance().connect();
+        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
         return statement;
@@ -111,7 +109,7 @@ public class SelectDefaultItemDao {
                 tmpItem.setPrice(rs.getFloat(1));
                 tmpItem.setName(rs.getString(2));
                 tmpItem.setDescription(rs.getString(3));
-                tmpItem.setItemStatusId(rs.getInt(4));
+                tmpItem.setStatusId(rs.getInt(4));
                 tmpItem.setItemStatus(rs.getString(5));
                 tmpItem.setTypeId(rs.getInt(6));
                 tmpItem.setType(rs.getString(7));

@@ -1,7 +1,6 @@
 package servlet;
 
 import dao.SelectDefaultItemDao;
-import dao.request.SelectClothesDao;
 import dao.request.SelectTypeDao;
 import entity.event.ItemType;
 import javax.servlet.ServletException;
@@ -23,14 +22,14 @@ public class SelectItemServlet extends javax.servlet.http.HttpServlet {
     private void doRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<ItemType> type=SelectTypeDao.readType();
         request.setAttribute("typeitem", type);
-        if (request.getParameter("entity").equals("ALL")) {
+        if (request.getParameter("type").equals("ALL")) {
                 request.setAttribute("item", SelectDefaultItemDao
                         .getInstance().readAllListItem());
         }
         else {
             request.setAttribute("item", SelectDefaultItemDao
                     .getInstance()
-                    .readFilteredListItem(Integer.valueOf(request.getParameter("entityid"))));
+                    .readFilteredListItem(Integer.valueOf(request.getParameter("typeId"))));
         }
         request.getRequestDispatcher("jsp/item_list.jsp").forward(request, response);
     }

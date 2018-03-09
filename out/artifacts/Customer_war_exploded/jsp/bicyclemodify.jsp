@@ -13,27 +13,27 @@
 
 <html>
 <head>
-    <title>${param.entity} ${param.action}</title>
+    <title>${param.type} ${param.action}</title>
 </head>
 <%@include file="includes/header.jsp" %>
 <%@include file="includes/defaultitemmodify.jsp" %>
 <div>
     <label for="ufork">Fork: </label>
     <input type="text" id="ufork" name="fork"
-       size="30" value="${ item.fork }">
+           size="30" value="${ item.fork }">
 </div>
 <div>
     <label for="ubrakes">Brakes: </label>
- <input type="text" id="ubrakes" name="brakes"
-       size="30" value="${ item.brakes }">
+    <input type="text" id="ubrakes" name="brakes"
+           size="30" value="${ item.brakes }">
 </div>
 <div>
     <label for="uframe">Frame: </label>
- <input type="text" id="uframe" name="frame"
-       size="30" value="${ item.frame }">
+    <input type="text" id="uframe" name="frame"
+           size="30" value="${ item.frame }">
 </div>
-    <input type="submit" name="button" value="${param.action}"/>
-    <a href="selectitemservlet" title="">Cancel</a>
+<input type="submit" name="button" value="${param.action}"/>
+<a href="selectitemservlet" title="">Cancel</a>
 </form>
 </body>
 </html>

@@ -12,8 +12,8 @@
     <div>
         <div>
             <input type="hidden" name="action" value="${ param.action }">
-            <input type="hidden" name="entity" value="${ param.entity }">
-            <input type="hidden" name="entityid" value="${ param.entityid }">
+            <input type="hidden" name="type" value="${ param.type }">
+            <input type="hidden" name="typeId" value="${ param.typeId }">
         <label for="uname">Item name: </label>
         <input type="text" id="uname" name="name"
                size="30" value="${ item.name }">
@@ -23,13 +23,13 @@
         <input type="text" id="uprice" name="price"
                size="8" value="${ item.price }">
         </div>
-        <input type="hidden" name="itemid" value="${ item.itemId }">
+        <input type="hidden" name="itemId" value="${ item.itemId }">
         <div>
             <textarea name="description" id="description">${ item.description }</textarea>
         </div>
         <div>
             <label for="selectstatus">Status: </label>
-            <select name="selectstatus">
+            <select name="statusId">
                    <c:forEach var="itatus" items="${statuses}">
                      <option value="${itatus.itemStatusId}" ${itatus.itemStatusId == item.itemStatusId ? 'selected="selected"' : ''}>${itatus.itemStatus}</option>
                    </c:forEach>

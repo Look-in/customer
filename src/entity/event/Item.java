@@ -1,14 +1,11 @@
 package entity.event;
 
 
-import dao.request.SelectItemStatusDao;
 import entity.SetException;
 import sun.misc.BASE64Encoder;
 
-import java.util.Map;
 
-
-public class Item implements ItemAttributes{
+public class Item {
     private int itemId;
     private float price;
     private String name;
@@ -28,11 +25,11 @@ public class Item implements ItemAttributes{
     }
 
     public Item(int itemId, float price, String name, String description, int statusId) {
-        this.itemStatusId=statusId;
-        this.itemId=itemId;
-        this.price=price;
-        this.name=name;
-        this.description=description;
+        this.itemStatusId = statusId;
+        this.itemId = itemId;
+        this.price = price;
+        this.name = name;
+        this.description = description;
     }
 
     public Item() {
@@ -43,7 +40,7 @@ public class Item implements ItemAttributes{
         return itemStatusId;
     }
 
-    public void setItemStatusId(int itemStatusId) {
+    public void setStatusId(int itemStatusId) {
         this.itemStatusId = itemStatusId;
     }
 
@@ -53,32 +50,33 @@ public class Item implements ItemAttributes{
 
     public String getName() {
         return name;
-    };
+    }
 
-    public int getItemId(){
+    public int getItemId() {
         return itemId;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 
     public void setItemId(int itemId) {
-        this.itemId=itemId;
+        this.itemId = itemId;
     }
+
     // @Test
-    public void setPrice(float price){
-        if (price<=0 ) throw new SetException("Error. Price not specified");
-        else this.price=price;
+    public void setPrice(float price) {
+        if (price <= 0) throw new SetException("Error. Price not specified");
+        else this.price = price;
     }
 
     public void setName(String name) {
-        this.name=name;
+        this.name = name;
     }
 
 
     public void setDescription(String description) {
-        this.description=description;
+        this.description = description;
     }
 
     public void setImage(byte[] image) {
@@ -89,10 +87,9 @@ public class Item implements ItemAttributes{
         return image;
     }
 
+    // encoding the byte image string
+    //удалить после отладки, если будет реализован иной метод
     public String getBase64imageFile() {
-            // encoding the byte image string
-            //удалить после отладки, если будет реализован иной метод
-
         BASE64Encoder base64Encoder = new BASE64Encoder();
         StringBuilder imageString = new StringBuilder();
         imageString.append("data:image/png;base64,");
@@ -119,45 +116,13 @@ public class Item implements ItemAttributes{
     @Override
     public String toString() {
         return "Item [Id =" + itemId + ", price=" +
-                String.format("%.2f", price) + ", name=" + name + " description= "+
-                description +" statusId="+itemStatusId + " type="+type+" typeId="+typeId;
+                String.format("%.2f", price) + ", name=" + name + " description= " +
+                description + " statusId=" + itemStatusId + " type=" + type + " typeId=" + typeId;
     }
+}
 
-    @Override
-    public void setItemAttributes(Map<String, String[]> attributes) {
-        String[] str;
-        str = attributes.get("itemid");
-        if (str.length > 0) {
-            if (str[0]!=null&&!str[0].isEmpty())
-            itemId = Integer.valueOf(str[0]);
-        }
-        str = attributes.get("price");
-        if (str.length > 0) {
-            if (str[0]!=null&&!str[0].isEmpty())
-                price = Float.valueOf(str[0]);
-        }
-        str = attributes.get("name");
-        if (str.length > 0) name = str[0];
-        str = attributes.get("description");
-        if (str.length > 0) description = str[0];
-        str = attributes.get("selectstatus");
-        if (str.length > 0) {
-            if (str[0]!=null&&!str[0].isEmpty()) {
-                itemStatusId = Integer.valueOf(str[0]);
-                SelectItemStatusDao.readItemStatus().get(itemStatusId-1);
-            }
-        }
-        str = attributes.get("entity");
-        if (str.length > 0) type = str[0];
-        str = attributes.get("entityid");
-        if (str.length > 0) {
-            if (str[0]!=null&&!str[0].isEmpty()) {
-                typeId = Integer.valueOf(str[0]);
-            }
-        }
 
-        }
-    }
+
 
 
 
