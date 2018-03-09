@@ -1,49 +1,39 @@
 package dao.request;
 
-import entity.ItemStatus;
 import jdbc.JdbcConnect;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SelectItemStatusDao {
     private static SelectItemStatusDao instance;
 
-    public static SelectItemStatusDao getInstance(){
-        if(instance == null){
+    public static SelectItemStatusDao getInstance() {
+        if (instance == null) {
             instance = new SelectItemStatusDao();
         }
         return instance;
     }
 
-
-    public static ArrayList<ItemStatus> readItemStatus() {
-        ArrayList<ItemStatus> status = new ArrayList<>();
-        Connection connection= JdbcConnect.getInstance().connect();
-             try (Statement st = connection.createStatement()) {
-                ResultSet rs = null;
-                try {
-                    rs = st.executeQuery("SELECT " +
-                            "ID,STATUS" +
-                            " FROM ITEM_STATUS order by id;");
-                    while (rs.next()) {
-                        ItemStatus tmpStatus = new ItemStatus();
-                        tmpStatus.setItemStatusId(rs.getInt(1));
-                        tmpStatus.setItemStatus(rs.getString(2));
-                        status.add(tmpStatus);
-                    }
-                } catch (Exception exc) {
-                    throw new RuntimeException(
-                            "Error reading DB:" + exc.getMessage());
-                }
-                finally {if (rs != null) rs.close();
-                }
-
-            } catch (Exception exc) {
-                throw new RuntimeException("Satement can't closed: "+exc);
+    public Map<Integer, String> readItemStatuses() {
+        final String SQL = "SELECT " +
+                "ID,STATUS " +
+                "FROM ITEM_STATUS order by id;";
+        Map<Integer, String> status = new HashMap<>();
+        Connection connection = JdbcConnect.getInstance().connect();
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(SQL)) {
+            while (rs.next()) {
+                status.put(rs.getInt(1), rs.getString(2));
             }
-
+        } catch (SQLException exc) {
+            throw new RuntimeException(
+                    "Error reading ItemStatuses:" + exc.getMessage());
+        }
         return status;
 
     }

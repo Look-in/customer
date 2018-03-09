@@ -1,4 +1,4 @@
-package dao;
+package dao.request;
 
 import entity.event.Item;
 import jdbc.JdbcConnect;
@@ -31,7 +31,7 @@ public class SelectDefaultItemDao {
         return statement;
     }
 
-    public ArrayList<Item> readFilteredListItem(int typeItemId) {
+    public ArrayList<Item> readListItem(int typeItemId) {
         ArrayList<Item> items = new ArrayList<>();
         try (PreparedStatement statement = selectAllPreparedStatement(typeItemId);
              ResultSet rs = statement.executeQuery()) {
@@ -61,7 +61,7 @@ public class SelectDefaultItemDao {
                             tmpItem.setImage(ph.getBytes(1, (int) ph.length()));*/
     }
 
-    public ArrayList<Item> readAllListItem() {
+    public ArrayList<Item> readListItem() {
 
         ArrayList<Item> items = new ArrayList<>();
         Connection connection = JdbcConnect.getInstance().connect();

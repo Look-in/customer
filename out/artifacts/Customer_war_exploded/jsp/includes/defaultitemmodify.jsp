@@ -30,8 +30,8 @@
         <div>
             <label for="selectstatus">Status: </label>
             <select name="statusId">
-                   <c:forEach var="itatus" items="${statuses}">
-                     <option value="${itatus.itemStatusId}" ${itatus.itemStatusId == item.itemStatusId ? 'selected="selected"' : ''}>${itatus.itemStatus}</option>
+                   <c:forEach var="istatus" items="${statuses}">
+                     <option value="${istatus.key}" ${istatus.key == item.itemStatusId ? 'selected="selected"' : ''}>${istatus.value}</option>
                    </c:forEach>
              </select>
         </div>

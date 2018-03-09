@@ -1,7 +1,7 @@
 package entity.event;
 
 
-import entity.SetException;
+import Utils.SetException;
 import sun.misc.BASE64Encoder;
 
 
@@ -16,14 +16,6 @@ public class Item {
     private String type;
     private String itemStatus;
 
-    public String getItemStatus() {
-        return itemStatus;
-    }
-
-    public void setItemStatus(String itemStatus) {
-        this.itemStatus = itemStatus;
-    }
-
     public Item(int itemId, float price, String name, String description, int statusId) {
         this.itemStatusId = statusId;
         this.itemId = itemId;
@@ -33,7 +25,14 @@ public class Item {
     }
 
     public Item() {
+    }
 
+    public String getItemStatus() {
+        return itemStatus;
+    }
+
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus = itemStatus;
     }
 
     public int getItemStatusId() {

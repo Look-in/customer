@@ -7,8 +7,6 @@ package dao;
 
 import entity.event.Item;
 
-import java.sql.SQLException;
-
 public interface ChangeInstance<T extends Item> {
 
     /**

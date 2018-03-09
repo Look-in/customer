@@ -1,42 +1,30 @@
-package entity;
-
-/**
- * Invoking methods of classes that extends Item with attributes
- * from request.getParameters
- * Can use Commons BeanUtils
- *
- * @author Serg Shankunas
- */
+package Utils;
 
 import entity.event.Item;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class ItemAttribute {
+public class MainUtils {
 
-    private static ItemAttribute instance;
+    /**
+     * Invoking methods of classes that extends Item with attributes
+     * from servlet.request.getParameters
+     * Can use Commons BeanUtils instead this.
+     *
+     * @author Serg Shankunas
+     */
 
-    public static ItemAttribute getInstance() {
-        if (instance == null) {
-            instance = new ItemAttribute();
-        }
-        return instance;
-    }
+    private static Class[] params = {int.class, float.class, String.class};
 
-
-    private Class[] params = {int.class,float.class,String.class};
-
-    public ItemAttribute() {
-    }
-
-    private String upperCaseFirst(String value) {
+    private static String upperCaseFirst(String value) {
         char[] array = value.toCharArray();
         array[0] = Character.toUpperCase(array[0]);
         return new String(array);
     }
 
-    public void setItemAttributes(Item item, Map<String, String[]> attributes) {
+    public static void setItemAttributes(Item item, Map<String, String[]> attributes) {
         String str;
         Method m;
         Object attribute;
@@ -56,4 +44,5 @@ public class ItemAttribute {
             }
         }
     }
+
 }

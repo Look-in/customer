@@ -2,7 +2,6 @@ package dao.request;
 
 
 import dao.SelectDao;
-import dao.SelectDefaultItemDao;
 import entity.Clothes;
 import entity.event.Item;
 import jdbc.JdbcConnect;

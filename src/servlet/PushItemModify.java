@@ -1,20 +1,15 @@
 package servlet;
 
 import dao.ChangeInstance;
-import dao.request.BicycleDao;
-import dao.request.ClothesDao;
-import entity.Bicycle;
-import entity.Clothes;
-import entity.ItemAttribute;
+import Utils.MainUtils;
 import entity.event.Item;
+import entity.event.ItemFactory;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @WebServlet(
         name = "PushItemModify",
@@ -24,19 +19,11 @@ import java.util.Map;
 public class PushItemModify extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        Map<Integer, Item> daoItem = new HashMap<>();
-        daoItem.put(1, new Clothes());
-        daoItem.put(2, new Bicycle());
-        Map<Integer, ChangeInstance> daoInstance = new HashMap<>();
-        daoInstance.put(1, ClothesDao.getInstance());
-        daoInstance.put(2, BicycleDao.getInstance());
-        Item item = daoItem.get(Integer.valueOf(request.getParameter("typeId")));
-        ItemAttribute.getInstance().setItemAttributes(item, parameterMap);
-        ChangeInstance dao = daoInstance.get(Integer.valueOf(request.getParameter("typeId")));
+        Item item = ItemFactory.createItem(Integer.valueOf(request.getParameter("typeId")));
+        MainUtils.setItemAttributes(item, request.getParameterMap());
+        ChangeInstance dao = ItemFactory.getItemInstanceDao(Integer.valueOf(request.getParameter("typeId")));
         switch (request.getParameter("action")) {
             case "ADD":
-                //раскоментировать после отладки
                 dao.create(item);
                 break;
             case "EDIT":
