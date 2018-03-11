@@ -5,6 +5,7 @@ import entity.event.AttributeToCompare;
 import entity.event.Item;
 import entity.event.ItemFactory;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,13 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet(
+/*@WebServlet(
         name = "SelectItemServlet",
         description = "Сервлет для передачи списка товаров",
-        urlPatterns = "/selectitemservlet")
+        urlPatterns = "/selectitemservlet")*/
 
 
 public class SelectItemServlet extends javax.servlet.http.HttpServlet {
+
+
+
 
     private void doRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("sortBy", AttributeToCompare.values());
