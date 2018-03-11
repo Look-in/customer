@@ -1,6 +1,7 @@
 package servlet;
 
 import entity.comparator.ItemComparator;
+import entity.event.AttributeToCompare;
 import entity.event.Item;
 import entity.event.ItemFactory;
 
@@ -20,14 +21,16 @@ import java.util.*;
 public class SelectItemServlet extends javax.servlet.http.HttpServlet {
 
     private void doRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("sortBy", Arrays.asList("Price", "Price DESC", "Name", "Status"));
+        request.setAttribute("sortBy", AttributeToCompare.values());
         ArrayList<Item> item;
-        if (request.getParameter("typeId") == null)
+        if (request.getParameter("itemType").equals("ALL"))
             item = ItemFactory.getDefaultItemDao().readListItem();
         else
-            item = ItemFactory.getDefaultItemDao().readListItem(Integer.valueOf(request.getParameter("typeId")));
-        request.setAttribute("typeitem", ItemFactory.getItemTypeDao().readItemType());
-        if (request.getParameter("sortingBy") != null) ItemComparator.compare(item,request.getParameter("sortingBy"));
+            item = ItemFactory.getDefaultItemDao().readListItem(Integer.valueOf(request.getParameter("itemType")));
+        request.setAttribute("itemType", ItemFactory.getItemTypeDao().readItemType());
+        if (request.getParameter("sortingBy") != null) {
+            ItemComparator.compare(item, AttributeToCompare.valueOf(request.getParameter("sortingBy")));
+        }
         request.setAttribute("item", item);
         request.getRequestDispatcher("jsp/item_list.jsp").forward(request, response);
     }

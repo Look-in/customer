@@ -8,8 +8,8 @@ public class Bicycle extends Item {
     private String brakes;
     private String frame;
 
-    public Bicycle(int itemId, float price, String name, String description, int statusId, String itemStatus, String fork, String brakes, String frame) {
-        super(itemId, price, name, description, statusId);
+    public Bicycle(int itemId, float price, String name, String description, ItemStatus itemStatus, ItemType itemType, String fork, String brakes, String frame) {
+        super(itemId, price, name, description, itemStatus, itemType);
         this.fork = fork;
         this.brakes = brakes;
         this.frame = frame;

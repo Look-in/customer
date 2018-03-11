@@ -9,10 +9,10 @@ import entity.Clothes;
 public class ItemFactory {
 
     public static Item createItem(int id) {
-        switch (id) {
-            case 1:
+        switch (ItemFactory.getItemTypeDao().readItemType(id)) {
+            case "CLOTHES":
                 return new Clothes();
-            case 2:
+            case "BICYCLE":
                 return new Bicycle();
             default:
                 return null;
@@ -20,10 +20,10 @@ public class ItemFactory {
     }
 
     public static ChangeInstance getItemInstanceDao(int id) {
-        switch (id) {
-            case 1:
+        switch (ItemFactory.getItemTypeDao().readItemType(id)) {
+            case "CLOTHES":
                 return ClothesDao.getInstance();
-            case 2:
+            case "BICYCLE":
                 return BicycleDao.getInstance();
             default:
                 return null;
@@ -34,8 +34,8 @@ public class ItemFactory {
         return SelectItemStatusDao.getInstance();
     }
 
-    public static SelectTypeDao getItemTypeDao() {
-        return SelectTypeDao.getInstance();
+    public static SelectItemTypeDao getItemTypeDao() {
+        return SelectItemTypeDao.getInstance();
     }
 
     public static SelectDefaultItemDao getDefaultItemDao() {
@@ -43,10 +43,10 @@ public class ItemFactory {
     }
 
     public static SelectDao getItemDao(int id) {
-        switch (id) {
-            case 1:
+        switch (ItemFactory.getItemTypeDao().readItemType(id)) {
+            case "CLOTHES":
                 return SelectClothesDao.getInstance();
-            case 2:
+            case "BICYCLE":
                 return SelectBicycleDao.getInstance();
             default:
                 return null;

@@ -10,20 +10,23 @@
 --%>
 <link href="css/global.css" rel="stylesheet" type="text/css">
 <link href="css/item.css" rel="stylesheet" type="text/css">
-
-<html>
 <head>
-    <title>${param.entity} ${param.action}</title>
+    <title>${param.type} ${param.action}</title>
 </head>
 <%@include file="includes/header.jsp" %>
 <%@include file="includes/defaultitemmodify.jsp" %>
-<label for="useason">Season: </label>
-<div>
-<input type="text" id="useason" name="season"
-       size="30" value="${ item.season }">
-</div>
-    <input type="submit" name="button" value="${param.action}"/>
-    <a href="selectitemservlet" title="">Cancel</a>
+<tr>
+    <td>
+        Season:
+    </td>
+    <td>
+        <input type="text" id="useason" name="season"
+               size="30" value="${ item.season }">
+    </td>
+</tr>
+</table>
+<input type="submit" name="button" value="${param.action}"/>
+<a href="selectitemservlet" title="">Cancel</a>
 </form>
 </body>
 </html>

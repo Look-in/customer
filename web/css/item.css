@@ -1,9 +1,25 @@
-.add-item {
+body {
+    text-shadow: 0 1px 0 #ccc;
+}
+
+
+.sort-item {
     height: 30px;
     padding:10px;
+    padding-left: 0px;
     background: rgb(80, 114, 150, 0.4);
     color: #2b2b2b;
-    text-shadow: 0 1px 0 #fff;
+}
+
+.add-item {
+    overflow: hidden;
+    float: left;
+    padding-left: 20px;
+}
+
+.parent-item {
+    float: none;
+    overflow: auto;
 }
 
 .link-button {
@@ -77,4 +93,20 @@
 .img-responsive:hover .item {
     opacity: 1;
     transition: opacity .3s;
+}
+
+.table-edit {
+    font-size: 18px;
+}
+
+.table-edit input {
+    font-size: 18px;
+}
+
+.table-edit textarea {
+    font-size: 18px;
+}
+
+.table-edit select {
+    font-size: 18px;
 }

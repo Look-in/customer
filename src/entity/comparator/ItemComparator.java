@@ -1,25 +1,26 @@
 package entity.comparator;
 
+import entity.event.AttributeToCompare;
 import entity.event.Item;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ItemComparator {
+public class ItemComparator  {
 
-    public static void compare(ArrayList<Item> item, String sortBy) {
+    public static void compare(ArrayList<Item> item, AttributeToCompare sortBy) {
         switch (sortBy) {
-            case "Price":
+            case PRICE:
                 Collections.sort(item, (o1, o2) -> (int) (o1.getPrice() - o2.getPrice()));
                 break;
-            case "Price DESC":
+            case PRICEDESC:
                 Collections.sort(item, (o1, o2) -> (int) (o2.getPrice() - o1.getPrice()));
                 break;
-            case "Name":
+            case NAME:
                 Collections.sort(item, (o1, o2) -> (o1.getName().compareToIgnoreCase(o2.getName())));
                 break;
-            case "Status":
-                Collections.sort(item, (o1, o2) -> (o1.getItemStatusId() - o2.getItemStatusId()));
+            case STATUS:
+                Collections.sort(item, (o1, o2) -> (o1.getItemStatus().getItemStatusId() - o2.getItemStatus().getItemStatusId()));
                 break;
         }
     }

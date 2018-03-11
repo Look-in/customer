@@ -4,6 +4,7 @@ package dao.request;
 import dao.SelectDao;
 import entity.Clothes;
 import entity.event.Item;
+import entity.event.ItemFactory;
 import jdbc.JdbcConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +40,7 @@ public class SelectClothesDao implements SelectDao{
         Clothes tmpItem = new Clothes();
         tmpItem.setItemId(id);
         //Заполнить базовые свойства
-        SelectDefaultItemDao.readItem(tmpItem);
+        ItemFactory.getDefaultItemDao().readItem(tmpItem);
         try (PreparedStatement statement = selectPreparedStatement(id);
              ResultSet rs = statement.executeQuery();) {
             while (rs.next()){

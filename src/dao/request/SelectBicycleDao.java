@@ -4,6 +4,7 @@ package dao.request;
 import dao.SelectDao;
 import entity.Bicycle;
 import entity.event.Item;
+import entity.event.ItemFactory;
 import jdbc.JdbcConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +40,7 @@ public class SelectBicycleDao implements SelectDao{
         Bicycle tmpItem = new Bicycle();
         tmpItem.setItemId(id);
         //Заполнить базовые свойства
-        SelectDefaultItemDao.readItem(tmpItem);
+        ItemFactory.getDefaultItemDao().readItem(tmpItem);
         Connection connection= JdbcConnect.getInstance().connect();
         try (PreparedStatement statement = selectPreparedStatement(id);
             ResultSet rs = statement.executeQuery();) {

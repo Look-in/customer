@@ -20,8 +20,8 @@ public abstract class ItemDao {
         statement.setFloat(1, entity.getPrice());
         statement.setString(2, entity.getName());
         statement.setString(3, entity.getDescription());
-        statement.setInt(4, entity.getItemStatusId());
-        statement.setInt(5, entity.getTypeId());
+        statement.setInt(4, entity.getItemStatus().getItemStatusId());
+        statement.setInt(5, entity.getItemType().getItemTypeId());
         return statement;
     }
 
@@ -47,7 +47,7 @@ public abstract class ItemDao {
         statement.setFloat(1, entity.getPrice());
         statement.setString(2, entity.getName());
         statement.setString(3, entity.getDescription());
-        statement.setInt(4, entity.getItemStatusId());
+        statement.setInt(4, entity.getItemStatus().getItemStatusId());
         statement.setInt(5, entity.getItemId());
         return statement;
     }

@@ -19,9 +19,9 @@ import java.io.IOException;
 public class PushItemModify extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Item item = ItemFactory.createItem(Integer.valueOf(request.getParameter("typeId")));
+        Item item = ItemFactory.createItem(Integer.valueOf(request.getParameter("itemType")));
         MainUtils.setItemAttributes(item, request.getParameterMap());
-        ChangeInstance dao = ItemFactory.getItemInstanceDao(Integer.valueOf(request.getParameter("typeId")));
+        ChangeInstance dao = ItemFactory.getItemInstanceDao(Integer.valueOf(request.getParameter("itemType")));
         switch (request.getParameter("action")) {
             case "ADD":
                 dao.create(item);

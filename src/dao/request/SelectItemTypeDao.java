@@ -1,51 +1,52 @@
 package dao.request;
 
-import entity.ItemStatus;
+import entity.ItemType;
 import jdbc.JdbcConnect;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectItemStatusDao {
-    private static SelectItemStatusDao instance;
+public class SelectItemTypeDao {
 
-    public static SelectItemStatusDao getInstance() {
+    private static SelectItemTypeDao instance;
+
+    public static SelectItemTypeDao getInstance() {
         if (instance == null) {
-            instance = new SelectItemStatusDao();
+            instance = new SelectItemTypeDao();
         }
         return instance;
     }
 
-    public List<ItemStatus> readItemStatus() {
-        final String SQL = "SELECT " +
-                "ID,STATUS " +
-                "FROM ITEM_STATUS order by id;";
-        List<ItemStatus> status = new ArrayList<>();
+
+    public List<ItemType> readItemType() {
+        final String sql = "SELECT ID,ITEM_TYPE " +
+                "FROM ITEM_TYPE;";
+        List<ItemType> type = new ArrayList<>();
         Connection connection = JdbcConnect.getInstance().connect();
         try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery(SQL)) {
+             ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                status.add(new ItemStatus(rs.getInt(1), rs.getString(2)));
+                type.add(new ItemType(rs.getInt(1), rs.getString(2)));
             }
         } catch (SQLException exc) {
             throw new RuntimeException(
-                    "Error reading ItemStatuses:" + exc.getMessage());
+                    "Error reading DB:" + exc.getMessage());
         }
-        return status;
+        return type;
     }
 
     private static PreparedStatement selectPreparedStatement(int id) throws SQLException {
         final String SQL = "SELECT " +
-                "STATUS " +
-                "FROM ITEM_STATUS WHERE id= ?;";
+                "ITEM_TYPE " +
+                "FROM ITEM_TYPE WHERE id= ?;";
         Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
         return statement;
     }
 
-    public String readItemStatus(int itemStatusId) {
+    public String readItemType(int itemStatusId) {
         String result=null;
         try (PreparedStatement statement = selectPreparedStatement(itemStatusId);
              ResultSet rs = statement.executeQuery()) {

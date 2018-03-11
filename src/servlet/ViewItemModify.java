@@ -22,13 +22,13 @@ public class ViewItemModify extends HttpServlet {
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         if (request.getParameter("itemId") != null) {
-            request.setAttribute("item", ItemFactory.getItemDao(Integer.valueOf(request.getParameter("typeId")))
+            request.setAttribute("item", ItemFactory.getItemDao(Integer.valueOf(request.getParameter("itemType")))
                     .readItem(Integer.valueOf(request.getParameter("itemId"))));
         }
-        request.setAttribute("statuses", ItemFactory.getItemStatusDao().readItemStatuses());
-        request.getRequestDispatcher(String.format("jsp/%smodify.jsp", request.getParameter("type").toLowerCase())).forward(request, response);
+        request.setAttribute("statuses", ItemFactory.getItemStatusDao().readItemStatus());
+        request.getRequestDispatcher(String.format("jsp/%smodify.jsp", ItemFactory.getItemTypeDao()
+                .readItemType(Integer.valueOf(request.getParameter("itemType"))).toLowerCase())).forward(request, response);
     }
 
 }

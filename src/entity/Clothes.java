@@ -5,8 +5,8 @@ import entity.event.Item;
 public class Clothes extends Item {
     private String season;
 
-    public Clothes(int itemId, float price, String name, String description, int statusId, String itemStatus, String season) {
-        super(itemId, price, name, description, statusId);
+    public Clothes(int itemId, float price, String name, String description, ItemStatus itemStatus, String season, ItemType itemType) {
+        super(itemId, price, name, description, itemStatus, itemType);
         this.season = season;
     }
 

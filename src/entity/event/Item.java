@@ -2,6 +2,8 @@ package entity.event;
 
 
 import Utils.SetException;
+import entity.ItemStatus;
+import entity.ItemType;
 import sun.misc.BASE64Encoder;
 
 
@@ -11,13 +13,12 @@ public class Item {
     private String name;
     private String description;
     private byte[] image;
-    private int itemStatusId;
-    private int typeId;
-    private String type;
-    private String itemStatus;
+    private ItemStatus itemStatus;
+    private ItemType itemType;
 
-    public Item(int itemId, float price, String name, String description, int statusId) {
-        this.itemStatusId = statusId;
+    public Item(int itemId, float price, String name, String description, ItemStatus itemStatus, ItemType itemType) {
+        this.itemStatus = itemStatus;
+        this.itemType=itemType;
         this.itemId = itemId;
         this.price = price;
         this.name = name;
@@ -25,22 +26,32 @@ public class Item {
     }
 
     public Item() {
+        itemStatus=new ItemStatus();
+        itemType=new ItemType();
     }
 
-    public String getItemStatus() {
+    public ItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(ItemType itemType) {
+        this.itemType = itemType;
+    }
+
+    public void setItemType(int itemTypeId) {
+        itemType.setItemType(itemTypeId);
+    }
+
+    public ItemStatus getItemStatus() {
         return itemStatus;
     }
 
-    public void setItemStatus(String itemStatus) {
+    public void setItemStatus(ItemStatus itemStatus) {
         this.itemStatus = itemStatus;
     }
 
-    public int getItemStatusId() {
-        return itemStatusId;
-    }
-
-    public void setStatusId(int itemStatusId) {
-        this.itemStatusId = itemStatusId;
+     public void setItemStatus(int itemStatusId) {
+        itemStatus.setItemStatus(itemStatusId);
     }
 
     public float getPrice() {
@@ -96,27 +107,12 @@ public class Item {
         return imageString.toString();
     }
 
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     @Override
     public String toString() {
         return "Item [Id =" + itemId + ", price=" +
                 String.format("%.2f", price) + ", name=" + name + " description= " +
-                description + " statusId=" + itemStatusId + " type=" + type + " typeId=" + typeId;
+                description + " status=" + itemStatus.toString() + " type=" + itemType.toString();
     }
 }
 

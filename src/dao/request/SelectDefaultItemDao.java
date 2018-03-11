@@ -1,6 +1,7 @@
 package dao.request;
 
 import entity.event.Item;
+import entity.event.ItemFactory;
 import jdbc.JdbcConnect;
 
 import java.sql.*;
@@ -20,11 +21,8 @@ public class SelectDefaultItemDao {
 
     private static PreparedStatement selectAllPreparedStatement(int id) throws SQLException {
         final String SQL = "SELECT " +
-                "item.ID,PRICE,NAME,DESCRIPTION,item_status.ID,STATUS" +
-                " FROM ITEM INNER JOIN " +
-                "item_status " +
-                "ON item.ITEM_STATUS_ID=item_status.ID " +
-                "WHERE ITEM_TYPE_ID=?;";
+                "ID,PRICE,NAME,DESCRIPTION,ITEM_STATUS_ID, ITEM_TYPE_ID " +
+                "FROM ITEM WHERE ITEM_TYPE_ID=?;";
         Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
@@ -39,7 +37,6 @@ public class SelectDefaultItemDao {
             while (rs.next()) {
                 item = new Item();
                 setItemParameter(rs, item);
-                item.setTypeId(typeItemId);
                 items.add(item);
             }
         } catch (Exception exc) {
@@ -54,8 +51,8 @@ public class SelectDefaultItemDao {
         item.setPrice(rs.getFloat(2));
         item.setName(rs.getString(3));
         item.setDescription(rs.getString(4));
-        item.setStatusId(rs.getInt(5));
-        item.setItemStatus(rs.getString(6));
+        item.setItemStatus(rs.getInt(5));
+        item.setItemType(rs.getInt(6));
         //Преобразуем Blob в строку формата base 64
                             /*Blob ph = rs.getBlob(7);
                             tmpItem.setImage(ph.getBytes(1, (int) ph.length()));*/
@@ -66,16 +63,13 @@ public class SelectDefaultItemDao {
         ArrayList<Item> items = new ArrayList<>();
         Connection connection = JdbcConnect.getInstance().connect();
         final String SQL = "SELECT " +
-                "item.ID,PRICE,NAME,DESCRIPTION,item_status.ID,STATUS,ITEM_TYPE_ID" +
-                " FROM ITEM INNER JOIN " +
-                "item_status " +
-                "ON item.ITEM_STATUS_ID=item_status.ID;";
+                "ID,PRICE,NAME,DESCRIPTION, ITEM_STATUS_ID,ITEM_TYPE_ID " +
+                "FROM ITEM;";
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(SQL)) {
             Item item;
             while (rs.next()) {
                 item = new Item();
-                item.setTypeId(rs.getInt(7));
                 setItemParameter(rs, item);
                 items.add(item);
             }
@@ -87,14 +81,10 @@ public class SelectDefaultItemDao {
     }
 
 
-    private static PreparedStatement selectPreparedStatement(int id) throws SQLException {
+    private PreparedStatement selectPreparedStatement(int id) throws SQLException {
         final String SQL = "SELECT " +
-                "PRICE,NAME,DESCRIPTION,item_status.ID,STATUS, ITEM.ITEM_TYPE_ID, ITEM_TYPE" +
-                " FROM (ITEM INNER JOIN " +
-                "item_status " +
-                "ON item.ITEM_STATUS_ID=item_status.ID) " +
-                "INNER JOIN ITEM_TYPE ON ITEM_TYPE.ID=ITEM.ITEM_TYPE_ID " +
-                "WHERE ITEM.ID=?;";
+                "ID, PRICE, NAME, DESCRIPTION, ITEM_STATUS_ID, ITEM_TYPE_ID " +
+                "FROM ITEM WHERE ITEM.ID=?;";
         Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
@@ -102,20 +92,11 @@ public class SelectDefaultItemDao {
     }
 
 
-    public static void readItem(Item tmpItem) {
+    public void readItem(Item tmpItem) {
         try (PreparedStatement statement = selectPreparedStatement(tmpItem.getItemId());
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
-                tmpItem.setPrice(rs.getFloat(1));
-                tmpItem.setName(rs.getString(2));
-                tmpItem.setDescription(rs.getString(3));
-                tmpItem.setStatusId(rs.getInt(4));
-                tmpItem.setItemStatus(rs.getString(5));
-                tmpItem.setTypeId(rs.getInt(6));
-                tmpItem.setType(rs.getString(7));
-                //Преобразуем Blob в строку формата base 64
-                            /*Blob ph = rs.getBlob(7);
-                            tmpItem.setImage(ph.getBytes(1, (int) ph.length()));*/
+                setItemParameter(rs, tmpItem);
             }
         } catch (Exception exc) {
             throw new RuntimeException(
