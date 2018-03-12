@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*@WebServlet(
+@WebServlet(
         name = "PushItemModify",
         description = "Сервлет для передачи списка товаров",
-        urlPatterns = "/pushitemmodify")*/
+        urlPatterns = "/pushitemmodify")
 
 public class PushItemModify extends HttpServlet {
 

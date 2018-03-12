@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SelectBicycleDao implements SelectDao{
+public class SelectBicycleDao implements SelectDao<Bicycle>{
 
 
     private static SelectBicycleDao instance;
@@ -36,24 +36,20 @@ public class SelectBicycleDao implements SelectDao{
     }
 
 @Override
-    public Item readItem(int id) {
-        Bicycle tmpItem = new Bicycle();
-        tmpItem.setItemId(id);
+    public void readItem(Bicycle item) {
         //Заполнить базовые свойства
-        ItemFactory.getDefaultItemDao().readItem(tmpItem);
+        ItemFactory.getDefaultItemDao().readItem(item);
         Connection connection= JdbcConnect.getInstance().connect();
-        try (PreparedStatement statement = selectPreparedStatement(id);
+        try (PreparedStatement statement = selectPreparedStatement(item.getItemId());
             ResultSet rs = statement.executeQuery();) {
             while (rs.next()){
-                tmpItem.setFork(rs.getString(1));
-                tmpItem.setBrakes(rs.getString(2));
-                tmpItem.setFrame(rs.getString(3));
+                item.setFork(rs.getString(1));
+                item.setBrakes(rs.getString(2));
+                item.setFrame(rs.getString(3));
                         }
                 } catch (Exception exc) {
             throw new RuntimeException(
                     "Error reading DB:" + exc.getMessage());
         }
-        return tmpItem;
-
     }
 }

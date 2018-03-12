@@ -1,14 +1,14 @@
 package dao.request;
 
+import dao.SelectDao;
 import entity.event.Item;
-import entity.event.ItemFactory;
 import jdbc.JdbcConnect;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class SelectDefaultItemDao {
+public class SelectDefaultItemDao implements SelectDao<Item> {
 
     private static SelectDefaultItemDao instance;
 
@@ -91,12 +91,12 @@ public class SelectDefaultItemDao {
         return statement;
     }
 
-
-    public void readItem(Item tmpItem) {
-        try (PreparedStatement statement = selectPreparedStatement(tmpItem.getItemId());
+    @Override
+    public void readItem(Item item) {
+        try (PreparedStatement statement = selectPreparedStatement(item.getItemId());
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
-                setItemParameter(rs, tmpItem);
+                setItemParameter(rs, item);
             }
         } catch (Exception exc) {
             throw new RuntimeException(

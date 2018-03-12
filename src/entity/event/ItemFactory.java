@@ -42,7 +42,7 @@ public class ItemFactory {
         return SelectDefaultItemDao.getInstance();
     }
 
-    public static SelectDao getItemDao(int id) {
+    public static SelectDao getSelectItemDao(int id) {
         switch (ItemFactory.getItemTypeDao().readItemType(id)) {
             case "CLOTHES":
                 return SelectClothesDao.getInstance();

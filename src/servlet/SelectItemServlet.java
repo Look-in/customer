@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-/*@WebServlet(
+@WebServlet(
         name = "SelectItemServlet",
         description = "Сервлет для передачи списка товаров",
-        urlPatterns = "/selectitemservlet")*/
+        urlPatterns = "/selectitemservlet")
 
 
 public class SelectItemServlet extends javax.servlet.http.HttpServlet {

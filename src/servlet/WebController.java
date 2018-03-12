@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CrunchifyHelloWorld {
+public class WebController {
 
     @RequestMapping("/welcome")
     public ModelAndView helloWorld() {

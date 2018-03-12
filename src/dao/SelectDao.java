@@ -7,7 +7,7 @@ package dao;
 
 import entity.event.Item;
 
-public interface SelectDao{
+public interface SelectDao<T extends Item>{
 
     /**
      * Считывает поля объекта Item
@@ -15,7 +15,7 @@ public interface SelectDao{
      * @param id код товара {@link Item}
      */
 
-    Item readItem(int id);
+    void readItem(T item);
 
 }
 
