@@ -1,7 +1,7 @@
 package dao.request;
 
 import entity.ItemStatus;
-import jdbc.JdbcConnect;
+import jdbc.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ public class SelectItemStatusDao {
                 "ID,STATUS " +
                 "FROM ITEM_STATUS order by id;";
         List<ItemStatus> status = new ArrayList<>();
-        Connection connection = JdbcConnect.getInstance().connect();
-        try (Statement st = connection.createStatement();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(SQL)) {
             while (rs.next()) {
                 status.add(new ItemStatus(rs.getInt(1), rs.getString(2)));
@@ -35,22 +35,22 @@ public class SelectItemStatusDao {
         return status;
     }
 
-    private static PreparedStatement selectPreparedStatement(int id) throws SQLException {
+    private static PreparedStatement selectPreparedStatement(Connection connection, int id) throws SQLException {
         final String SQL = "SELECT " +
                 "STATUS " +
                 "FROM ITEM_STATUS WHERE id= ?;";
-        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
         return statement;
     }
 
     public String readItemStatus(int itemStatusId) {
-        String result=null;
-        try (PreparedStatement statement = selectPreparedStatement(itemStatusId);
+        String result = null;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = selectPreparedStatement(connection, itemStatusId);
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
-                result=rs.getString(1);
+                result = rs.getString(1);
             }
         } catch (SQLException exc) {
             throw new RuntimeException(

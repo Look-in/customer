@@ -2,29 +2,28 @@ package dao.request;
 
 import dao.ChangeInstance;
 import entity.Bicycle;
-import jdbc.JdbcConnect;
+import jdbc.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
-public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
+public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle> {
 
     private static BicycleDao instance;
 
-    public static BicycleDao getInstance(){
-        if(instance == null){
+    public static BicycleDao getInstance() {
+        if (instance == null) {
             instance = new BicycleDao();
         }
         return instance;
     }
 
-    private PreparedStatement createPreparedStatement(Bicycle entity) throws SQLException{
-        final String sql ="INSERT INTO BICYCLE "
+    private PreparedStatement createPreparedStatement(Connection connection, Bicycle entity) throws SQLException {
+        final String sql = "INSERT INTO BICYCLE "
                 + "(ID, FORK, BRAKES, FRAME) VALUES "
                 + "(?, ?, ?, ?)";
-        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, entity.getItemId());
         statement.setString(2, entity.getFork());
@@ -33,11 +32,10 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
         return statement;
     }
 
-    private PreparedStatement updatePreparedStatement(Bicycle entity) throws SQLException{
-        final String sql ="UPDATE BICYCLE SET "
+    private PreparedStatement updatePreparedStatement(Connection connection, Bicycle entity) throws SQLException {
+        final String sql = "UPDATE BICYCLE SET "
                 + "FORK = ?, BRAKES=?, FRAME=? "
                 + "WHERE id = ?";
-        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, entity.getFork());
         statement.setString(2, entity.getBrakes());
@@ -51,28 +49,26 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
     public void create(Bicycle entity) {
         /*Try с ресурсами закрывает коннект после заверш обработки запроса
         На каждый запрос свой коннект, что замедляет работу, но на тестовом проекте это некритично*/
-        Connection connection = JdbcConnect.getInstance().connect();
-             //Заполняет базовую таблицу товара.
-            createItem(entity);
-            try (PreparedStatement statement = createPreparedStatement(entity)) {
-                //Заполняет таблицу свойств Clothes
-                statement.executeUpdate();
-        }
-          catch (SQLException e) {
+        //Заполняет базовую таблицу товара.
+        createItem(entity);
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = createPreparedStatement(connection, entity)) {
+            //Заполняет таблицу свойств Clothes
+            statement.executeUpdate();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void update(Bicycle entity) {
-        Connection connection= JdbcConnect.getInstance().connect();
-        try (PreparedStatement statement=updatePreparedStatement(entity)) {
-                updateItem(entity);
-                statement.executeUpdate();
-                }
-            catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = updatePreparedStatement(connection, entity)) {
+            updateItem(entity);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -80,21 +76,18 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle>{
         if (id == null) {
             return;
         }
-        final String sql ="DELETE FROM ITEM "
-                        + "WHERE id = ?";
+        final String sql = "DELETE FROM ITEM "
+                + "WHERE id = ?";
         //Try с ресурсами закрывает коннект после заверш обработки запроса
         //На каждый запрос свой коннект, что замедляет работу
-            Connection connection= JdbcConnect.getInstance().connect();
-            PreparedStatement statement = null;
-            try {
-                statement = connection.prepareStatement(sql);
-                statement.setInt(1, id);
-                statement.executeUpdate();
-            }
-            catch (Exception exc) {
-                throw new RuntimeException(
-                        "Error reading DB:" + exc.getMessage());
-            }
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception exc) {
+            throw new RuntimeException(
+                    "Error reading DB:" + exc.getMessage());
+        }
     }
 
 }

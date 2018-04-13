@@ -1,7 +1,7 @@
 package dao.request;
 
 import entity.event.Item;
-import jdbc.JdbcConnect;
+import jdbc.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +11,10 @@ import java.sql.SQLException;
 public abstract class ItemDao {
 
 
-    private PreparedStatement createPreparedStatement(Item entity) throws SQLException {
+    private PreparedStatement createPreparedStatement(Connection connection, Item entity) throws SQLException {
         final String sql = "INSERT INTO ITEM "
                 + "(PRICE,NAME,DESCRIPTION,ITEM_STATUS_ID,ITEM_TYPE_ID) VALUES "
                 + "(?, ?, ?, ?, ?)";
-        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setFloat(1, entity.getPrice());
         statement.setString(2, entity.getName());
@@ -26,8 +25,8 @@ public abstract class ItemDao {
     }
 
     public void createItem(Item entity) {
-        try (PreparedStatement statement = createPreparedStatement(entity)) {
-            Connection connection = JdbcConnect.getInstance().connect();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = createPreparedStatement(connection, entity)) {
             statement.executeUpdate();
             try (ResultSet keys = statement.getGeneratedKeys()) {
                 keys.next();
@@ -53,8 +52,8 @@ public abstract class ItemDao {
     }
 
     public void updateItem(Item entity) {
-        Connection connection = JdbcConnect.getInstance().connect();
-        try (PreparedStatement statement = updatePreparedStatement(connection, entity)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = updatePreparedStatement(connection, entity)) {
             statement.executeUpdate();
         } catch (SQLException exc) {
             throw new RuntimeException(

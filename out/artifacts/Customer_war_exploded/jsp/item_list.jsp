@@ -7,8 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<spring:url value="/resourses/global.css" var="globalCSS" />
+<link href="css/global.css" rel="stylesheet" type="text/css">
+<link href="css/item.css" rel="stylesheet" type="text/css">
 <link href="${globalCSS}" rel="stylesheet" />
 <%--<link href="/resourses/global.css" rel="stylesheet" type="text/css">
 <link href="/resourses/item.css" rel="stylesheet" type="text/css">--%>

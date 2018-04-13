@@ -9,7 +9,6 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="com.mysql.jdbc_5.1.5" />
           <element id="library" level="project" name="com.mysql.jdbc_5.1.51" />
-          <element id="library" level="project" name="spring-beans-5.0.4.RELEASE" />
         </element>
         <element id="file-copy" path="$PROJECT_DIR$/WEB-INF/mvc-dispatcher-servlet.xml" />
       </element>

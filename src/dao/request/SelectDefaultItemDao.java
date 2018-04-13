@@ -2,7 +2,7 @@ package dao.request;
 
 import dao.SelectDao;
 import entity.event.Item;
-import jdbc.JdbcConnect;
+import jdbc.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,11 +19,10 @@ public class SelectDefaultItemDao implements SelectDao<Item> {
         return instance;
     }
 
-    private static PreparedStatement selectAllPreparedStatement(int id) throws SQLException {
+    private static PreparedStatement selectAllPreparedStatement(Connection connection, int id) throws SQLException {
         final String SQL = "SELECT " +
                 "ID,PRICE,NAME,DESCRIPTION,ITEM_STATUS_ID, ITEM_TYPE_ID " +
                 "FROM ITEM WHERE ITEM_TYPE_ID=?;";
-        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
         return statement;
@@ -31,7 +30,8 @@ public class SelectDefaultItemDao implements SelectDao<Item> {
 
     public ArrayList<Item> readListItem(int typeItemId) {
         ArrayList<Item> items = new ArrayList<>();
-        try (PreparedStatement statement = selectAllPreparedStatement(typeItemId);
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = selectAllPreparedStatement(connection, typeItemId);
              ResultSet rs = statement.executeQuery()) {
             Item item;
             while (rs.next()) {
@@ -42,7 +42,6 @@ public class SelectDefaultItemDao implements SelectDao<Item> {
         } catch (Exception exc) {
             throw new RuntimeException(exc);
         }
-
         return items;
     }
 
@@ -61,11 +60,11 @@ public class SelectDefaultItemDao implements SelectDao<Item> {
     public ArrayList<Item> readListItem() {
 
         ArrayList<Item> items = new ArrayList<>();
-        Connection connection = JdbcConnect.getInstance().connect();
         final String SQL = "SELECT " +
                 "ID,PRICE,NAME,DESCRIPTION, ITEM_STATUS_ID,ITEM_TYPE_ID " +
                 "FROM ITEM;";
-        try (Statement st = connection.createStatement();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(SQL)) {
             Item item;
             while (rs.next()) {
@@ -81,11 +80,10 @@ public class SelectDefaultItemDao implements SelectDao<Item> {
     }
 
 
-    private PreparedStatement selectPreparedStatement(int id) throws SQLException {
+    private PreparedStatement selectPreparedStatement(Connection connection, int id) throws SQLException {
         final String SQL = "SELECT " +
                 "ID, PRICE, NAME, DESCRIPTION, ITEM_STATUS_ID, ITEM_TYPE_ID " +
                 "FROM ITEM WHERE ITEM.ID=?;";
-        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
         return statement;
@@ -93,7 +91,8 @@ public class SelectDefaultItemDao implements SelectDao<Item> {
 
     @Override
     public void readItem(Item item) {
-        try (PreparedStatement statement = selectPreparedStatement(item.getItemId());
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = selectPreparedStatement(connection, item.getItemId());
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 setItemParameter(rs, item);

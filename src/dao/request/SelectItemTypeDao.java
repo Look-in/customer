@@ -1,7 +1,7 @@
 package dao.request;
 
 import entity.ItemType;
-import jdbc.JdbcConnect;
+import jdbc.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,13 +18,12 @@ public class SelectItemTypeDao {
         return instance;
     }
 
-
     public List<ItemType> readItemType() {
         final String sql = "SELECT ID,ITEM_TYPE " +
                 "FROM ITEM_TYPE;";
         List<ItemType> type = new ArrayList<>();
-        Connection connection = JdbcConnect.getInstance().connect();
-        try (Statement st = connection.createStatement();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 type.add(new ItemType(rs.getInt(1), rs.getString(2)));
@@ -36,22 +35,22 @@ public class SelectItemTypeDao {
         return type;
     }
 
-    private static PreparedStatement selectPreparedStatement(int id) throws SQLException {
+    private static PreparedStatement selectPreparedStatement(Connection connection, int id) throws SQLException {
         final String SQL = "SELECT " +
                 "ITEM_TYPE " +
                 "FROM ITEM_TYPE WHERE id= ?;";
-        Connection connection = JdbcConnect.getInstance().connect();
         PreparedStatement statement = connection.prepareStatement(SQL);
         statement.setInt(1, id);
         return statement;
     }
 
     public String readItemType(int itemStatusId) {
-        String result=null;
-        try (PreparedStatement statement = selectPreparedStatement(itemStatusId);
+        String result = null;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = selectPreparedStatement(connection, itemStatusId);
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
-                result=rs.getString(1);
+                result = rs.getString(1);
             }
         } catch (SQLException exc) {
             throw new RuntimeException(
