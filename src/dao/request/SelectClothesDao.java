@@ -3,9 +3,9 @@ package dao.request;
 
 import dao.SelectDao;
 import entity.Clothes;
-import entity.event.ItemFactory;
 import jdbc.ConnectionPool;
 
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +13,11 @@ import java.sql.SQLException;
 
 public class SelectClothesDao implements SelectDao<Clothes> {
 
+    @Inject
+    private ConnectionPool connectionPool;
+
+    @Inject
+    SelectDefaultItemDao selectDefaultItemDao;
 
     private static SelectClothesDao instance;
 
@@ -37,8 +42,8 @@ public class SelectClothesDao implements SelectDao<Clothes> {
     @Override
     public void readItem(Clothes item) {
         //Заполнить базовые свойства
-        ItemFactory.getDefaultItemDao().readItem(item);
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        selectDefaultItemDao.readItem(item);
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = selectPreparedStatement(connection, item.getItemId());
              ResultSet rs = statement.executeQuery();) {
             while (rs.next()) {

@@ -32,9 +32,9 @@ public class ViewItemModify extends HttpServlet {
             ItemFactory.getSelectItemDao(Integer.valueOf(request.getParameter("itemType"))).readItem(item);
         }
         request.setAttribute("item", item);
-        request.setAttribute("statuses", ItemFactory.getItemStatusDao().readItemStatus());
-        request.getRequestDispatcher(String.format("jsp/%smodify.jsp", ItemFactory.getItemTypeDao()
-                .readItemType(Integer.valueOf(request.getParameter("itemType"))).toLowerCase())).forward(request, response);
+       // request.setAttribute("statuses", ItemFactory.getItemStatusDao().readItemStatus());
+     /*   request.getRequestDispatcher(String.format("jsp/%smodify.jsp", ItemFactory.getItemTypeDao()
+                .readItemType(Integer.valueOf(request.getParameter("itemType"))).toLowerCase())).forward(request, response);*/
     }
 
 }

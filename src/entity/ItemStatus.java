@@ -3,7 +3,9 @@ package entity;
 import entity.event.ItemFactory;
 
 public class ItemStatus {
+
     private int itemStatusId;
+
     private String itemStatus;
 
     public ItemStatus(int itemStatusId, String itemStatus) {
@@ -13,7 +15,7 @@ public class ItemStatus {
 
     public ItemStatus(int itemStatusId) {
         this.itemStatusId = itemStatusId;
-        itemStatus = ItemFactory.getItemStatusDao().readItemStatus(itemStatusId);
+       // itemStatus = ItemFactory.getItemStatusDao().readItemStatus(itemStatusId);
     }
 
     public ItemStatus() {
@@ -25,7 +27,7 @@ public class ItemStatus {
 
     public void setItemStatus(int itemStatusId) {
         this.itemStatusId=itemStatusId;
-        itemStatus=ItemFactory.getItemStatusDao().readItemStatus(itemStatusId);
+       // itemStatus=ItemFactory.getItemStatusDao().readItemStatus(itemStatusId);
     }
 
     public String getItemStatus() {

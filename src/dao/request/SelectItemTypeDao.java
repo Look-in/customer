@@ -1,28 +1,34 @@
 package dao.request;
 
+import dao.SelectItemType;
 import entity.ItemType;
 import jdbc.ConnectionPool;
 
+import javax.inject.Inject;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectItemTypeDao {
+public class SelectItemTypeDao implements SelectItemType {
 
-    private static SelectItemTypeDao instance;
+    @Inject
+    private ConnectionPool connectionPool;
 
-    public static SelectItemTypeDao getInstance() {
-        if (instance == null) {
-            instance = new SelectItemTypeDao();
-        }
-        return instance;
+    private static PreparedStatement selectPreparedStatement(Connection connection, int id) throws SQLException {
+        final String SQL = "SELECT " +
+                "ITEM_TYPE " +
+                "FROM ITEM_TYPE WHERE id= ?;";
+        PreparedStatement statement = connection.prepareStatement(SQL);
+        statement.setInt(1, id);
+        return statement;
     }
 
-    public List<ItemType> readItemType() {
+    @Override
+    public List<ItemType> readItemTypes() {
         final String sql = "SELECT ID,ITEM_TYPE " +
                 "FROM ITEM_TYPE;";
         List<ItemType> type = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
@@ -35,18 +41,10 @@ public class SelectItemTypeDao {
         return type;
     }
 
-    private static PreparedStatement selectPreparedStatement(Connection connection, int id) throws SQLException {
-        final String SQL = "SELECT " +
-                "ITEM_TYPE " +
-                "FROM ITEM_TYPE WHERE id= ?;";
-        PreparedStatement statement = connection.prepareStatement(SQL);
-        statement.setInt(1, id);
-        return statement;
-    }
-
+    @Override
     public String readItemType(int itemStatusId) {
         String result = null;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = selectPreparedStatement(connection, itemStatusId);
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
@@ -58,5 +56,4 @@ public class SelectItemTypeDao {
         }
         return result;
     }
-
 }

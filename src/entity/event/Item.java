@@ -1,11 +1,9 @@
 package entity.event;
 
-
 import Utils.SetException;
 import entity.ItemStatus;
 import entity.ItemType;
 import sun.misc.BASE64Encoder;
-
 
 public class Item {
     private int itemId;

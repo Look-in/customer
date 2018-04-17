@@ -5,13 +5,21 @@ import dao.SelectDao;
 import entity.Bicycle;
 import entity.event.ItemFactory;
 import jdbc.ConnectionPool;
+import jdbc.ConnectionPoolImpl;
 
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SelectBicycleDao implements SelectDao<Bicycle> {
+
+    @Inject
+    private ConnectionPool connectionPool;
+
+    @Inject
+    SelectDefaultItemDao selectDefaultItemDao;
 
 
     private static SelectBicycleDao instance;
@@ -37,8 +45,8 @@ public class SelectBicycleDao implements SelectDao<Bicycle> {
     @Override
     public void readItem(Bicycle item) {
         //Заполнить базовые свойства
-        ItemFactory.getDefaultItemDao().readItem(item);
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        selectDefaultItemDao.readItem(item);
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = selectPreparedStatement(connection, item.getItemId());
              ResultSet rs = statement.executeQuery();) {
             while (rs.next()) {

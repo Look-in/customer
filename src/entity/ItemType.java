@@ -13,7 +13,7 @@ public class ItemType {
 
     public ItemType(int itemTypeId) {
         this.itemTypeId = itemTypeId;
-        itemType = ItemFactory.getItemTypeDao().readItemType(itemTypeId);
+       // itemType = ItemFactory.getItemTypeDao().readItemType(itemTypeId);
     }
 
     public ItemType() {
@@ -21,7 +21,7 @@ public class ItemType {
 
     public void setItemType(int itemTypeId) {
         this.itemTypeId = itemTypeId;
-        itemType = ItemFactory.getItemTypeDao().readItemType(itemTypeId);
+      //  itemType = ItemFactory.getItemTypeDao().readItemType(itemTypeId);
     }
 
     public int getItemTypeId() {

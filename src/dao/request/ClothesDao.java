@@ -3,7 +3,9 @@ package dao.request;
 import dao.ChangeInstance;
 import entity.Clothes;
 import jdbc.ConnectionPool;
+import jdbc.ConnectionPoolImpl;
 
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,15 +13,8 @@ import java.sql.SQLException;
 
 public class ClothesDao extends ItemDao implements ChangeInstance<Clothes> {
 
-
-    private static ClothesDao instance;
-
-    public static ClothesDao getInstance() {
-        if (instance == null) {
-            instance = new ClothesDao();
-        }
-        return instance;
-    }
+    @Inject
+    private ConnectionPool connectionPool;
 
     private PreparedStatement createPreparedStatement(Connection connection, Clothes entity) throws SQLException {
         final String sql = "INSERT INTO CLOTHES "
@@ -46,7 +41,7 @@ public class ClothesDao extends ItemDao implements ChangeInstance<Clothes> {
     public void create(Clothes entity) {
         //Заполняет базовую таблицу товара.
         createItem(entity);
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = createPreparedStatement(connection, entity)) {
             //Заполняет таблицу свойств Clothes
             statement.executeUpdate();
@@ -57,7 +52,7 @@ public class ClothesDao extends ItemDao implements ChangeInstance<Clothes> {
 
     @Override
     public void update(Clothes entity) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = updatePreparedStatement(connection, entity)) {
             updateItem(entity);
             statement.executeUpdate();
@@ -75,7 +70,7 @@ public class ClothesDao extends ItemDao implements ChangeInstance<Clothes> {
                 + "WHERE id = ?";
         //Try с ресурсами закрывает коннект после заверш обработки запроса
         //На каждый запрос свой коннект, что замедляет работу
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, id);
             statement.executeUpdate();

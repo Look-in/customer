@@ -8,18 +8,20 @@ import java.util.concurrent.Executor;
 
 class PooledConnection implements Connection {
 
+    private ConnectionPool connectionPool;
+
     private Connection connection;
 
-    public PooledConnection(Connection connection) {
-
+    public PooledConnection(Connection connection, ConnectionPool connectionPool) {
         this.connection = connection;
+        this.connectionPool = connectionPool;
     }
 
     private ConcurrentHashMap<String, PreparedStatement> statements = new ConcurrentHashMap<>();
 
     @Override
     public void close() {
-        ConnectionPool.getInstance().putConnection(this);
+        connectionPool.putConnection(this);
     }
 
     /* Implements all methods from Connection */
@@ -284,12 +286,12 @@ class PooledConnection implements Connection {
     }
 
     @Override
-    public <T> T unwrap(Class<T> iFace) throws SQLException {
-        return connection.unwrap(iFace);
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return connection.unwrap(iface);
     }
 
     @Override
-    public boolean isWrapperFor(Class<?> iFace) throws SQLException {
-        return connection.isWrapperFor(iFace);
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return connection.isWrapperFor(iface);
     }
 }

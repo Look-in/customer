@@ -2,7 +2,9 @@ package dao.request;
 
 import entity.event.Item;
 import jdbc.ConnectionPool;
+import jdbc.ConnectionPoolImpl;
 
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +12,8 @@ import java.sql.SQLException;
 
 public abstract class ItemDao {
 
+    @Inject
+    private ConnectionPool connectionPool;
 
     private PreparedStatement createPreparedStatement(Connection connection, Item entity) throws SQLException {
         final String sql = "INSERT INTO ITEM "
@@ -25,7 +29,7 @@ public abstract class ItemDao {
     }
 
     public void createItem(Item entity) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = createPreparedStatement(connection, entity)) {
             statement.executeUpdate();
             try (ResultSet keys = statement.getGeneratedKeys()) {
@@ -52,7 +56,7 @@ public abstract class ItemDao {
     }
 
     public void updateItem(Item entity) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = updatePreparedStatement(connection, entity)) {
             statement.executeUpdate();
         } catch (SQLException exc) {

@@ -4,21 +4,15 @@ import dao.ChangeInstance;
 import entity.Bicycle;
 import jdbc.ConnectionPool;
 
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-
 public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle> {
 
-    private static BicycleDao instance;
-
-    public static BicycleDao getInstance() {
-        if (instance == null) {
-            instance = new BicycleDao();
-        }
-        return instance;
-    }
+    @Inject
+    private ConnectionPool connectionPool;
 
     private PreparedStatement createPreparedStatement(Connection connection, Bicycle entity) throws SQLException {
         final String sql = "INSERT INTO BICYCLE "
@@ -47,13 +41,11 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle> {
 
     @Override
     public void create(Bicycle entity) {
-        /*Try с ресурсами закрывает коннект после заверш обработки запроса
-        На каждый запрос свой коннект, что замедляет работу, но на тестовом проекте это некритично*/
-        //Заполняет базовую таблицу товара.
+        /*Try с ресурсами помещает коннект в пул
+        после заверш обработки запроса.*/
         createItem(entity);
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = createPreparedStatement(connection, entity)) {
-            //Заполняет таблицу свойств Clothes
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -62,7 +54,7 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle> {
 
     @Override
     public void update(Bicycle entity) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = updatePreparedStatement(connection, entity)) {
             updateItem(entity);
             statement.executeUpdate();
@@ -78,9 +70,7 @@ public class BicycleDao extends ItemDao implements ChangeInstance<Bicycle> {
         }
         final String sql = "DELETE FROM ITEM "
                 + "WHERE id = ?";
-        //Try с ресурсами закрывает коннект после заверш обработки запроса
-        //На каждый запрос свой коннект, что замедляет работу
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
